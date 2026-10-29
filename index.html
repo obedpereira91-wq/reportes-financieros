@@ -13,19 +13,29 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
-        body { -webkit-tap-highlight-color: transparent; user-select: none; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+        body { -webkit-tap-highlight-color: transparent; user-select: none; }
         @media print { .no-print { display: none !important; } }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
+    <style id="finsight-local-utility-css">
+*,*::before,*::after{box-sizing:border-box}html{line-height:1.5;-webkit-text-size-adjust:100%;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{margin:0}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}img,canvas,svg{display:block;max-width:100%}table{border-collapse:collapse;text-indent:0;border-color:inherit}th{text-align:left}button,input,select{margin:0}input[type=file]{max-width:100%}
+:root{--slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;--slate-900:#0f172a;--blue-50:#eff6ff;--blue-100:#dbeafe;--blue-200:#bfdbfe;--blue-600:#2563eb;--blue-700:#1d4ed8;--blue-800:#1e40af;--blue-900:#1e3a8a;--indigo-50:#eef2ff;--indigo-100:#e0e7ff;--indigo-600:#4f46e5;--indigo-700:#4338ca;--indigo-800:#3730a3;--indigo-900:#312e81;--violet-600:#7c3aed;--violet-700:#6d28d9;--emerald-50:#ecfdf5;--emerald-100:#d1fae5;--emerald-200:#a7f3d0;--emerald-300:#6ee7b7;--emerald-600:#059669;--emerald-700:#047857;--emerald-800:#065f46;--emerald-900:#064e3b;--emerald-950:#022c22;--rose-50:#fff1f2;--rose-600:#e11d48;--rose-700:#be123c;--rose-800:#9f1239;--red-50:#fef2f2;--red-600:#dc2626;--red-700:#b91c1c;--amber-50:#fffbeb;--amber-200:#fde68a;--amber-300:#fcd34d;--amber-600:#d97706;--amber-700:#b45309;--amber-800:#92400e;--amber-900:#78350f;--sky-50:#f0f9ff;--sky-600:#0284c7;--sky-700:#0369a1;--sky-800:#075985;--teal-600:#0d9488}
+.bg-white{background-color:#fff}.bg-white\/95{background-color:rgba(255,255,255,.95)}.bg-\[\#f8fafc\]{background-color:#f8fafc}.bg-slate-50{background-color:#f8fafc}.bg-slate-100{background-color:#f1f5f9}.bg-slate-900\/50{background-color:rgba(15,23,42,.5)}.bg-blue-50{background-color:#eff6ff}.bg-blue-100{background-color:#dbeafe}.bg-blue-600{background-color:#2563eb}.bg-emerald-50{background-color:#ecfdf5}.bg-emerald-100{background-color:#d1fae5}.bg-emerald-600{background-color:#059669}.bg-amber-50{background-color:#fffbeb}.bg-rose-50{background-color:#fff1f2}.bg-indigo-50{background-color:#eef2ff}.bg-red-50{background-color:#fef2f2}
+.text-white{color:#fff}.text-slate-400{color:#94a3b8}.text-slate-500{color:#64748b}.text-slate-600{color:#475569}.text-slate-700{color:#334155}.text-slate-800{color:#1e293b}.text-slate-900{color:#0f172a}.text-blue-600{color:#2563eb}.text-blue-700{color:#1d4ed8}.text-blue-800{color:#1e40af}.text-blue-900{color:#1e3a8a}.text-indigo-600{color:#4f46e5}.text-emerald-600{color:#059669}.text-emerald-700{color:#047857}.text-emerald-800{color:#065f46}.text-rose-600{color:#e11d48}.text-amber-600{color:#d97706}.text-sky-600{color:#0284c7}.text-teal-600{color:#0d9488}
+.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none!important}.fixed{position:fixed}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.top-0{top:0}.z-50{z-index:50}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.w-full{width:100%}.min-h-screen{min-height:100vh}.max-w-7xl{max-width:80rem}.mx-auto{margin-left:auto;margin-right:auto}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-12{padding-top:3rem;padding-bottom:3rem}.gap-2{gap:.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1>:not([hidden])~:not([hidden]){margin-top:.25rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}.space-y-4>:not([hidden])~:not([hidden]){margin-top:1rem}.space-y-5>:not([hidden])~:not([hidden]){margin-top:1.25rem}.space-y-6>:not([hidden])~:not([hidden]){margin-top:1.5rem}.space-x-2>:not([hidden])~:not([hidden]){margin-left:.5rem}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}
+.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.rounded-2xl{border-radius:1rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px;border-style:solid}.border-b{border-bottom:1px solid}.border-t{border-top:1px solid}.border-slate-200{border-color:#e2e8f0}.border-slate-300{border-color:#cbd5e1}.font-sans{font-family:ui-sans-serif,system-ui,sans-serif}.font-mono{font-family:ui-monospace,monospace}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-black{font-weight:900}.text-xs{font-size:.75rem}.text-sm{font-size:.875rem}.text-base{font-size:1rem}.text-lg{font-size:1.125rem}.uppercase{text-transform:uppercase}.tracking-tight{letter-spacing:-.025em}.shadow-sm{box-shadow:0 1px 2px 0 rgba(0,0,0,.05)}.backdrop-blur{backdrop-filter:blur(8px)}
+@media(min-width:640px){.sm\:flex-row{flex-direction:row}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:p-5{padding:1.25rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-sm{font-size:.875rem}}
+@media(min-width:768px){.md\:flex-row{flex-direction:row}.md\:w-64{width:16rem}}
+</style>
 </head>
-<body class="bg-[#f8fafc] text-slate-800 min-h-screen antialiased pb-12">
+<body class="bg-[#f8fafc] text-slate-800 min-h-screen font-sans antialiased pb-12">
 
-    <!-- HEADER CORPORATIVO -->
+    <!-- HEADER EJECUTIVO -->
     <header class="bg-white/95 backdrop-blur border-b border-slate-200/80 sticky top-0 z-50 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
@@ -42,19 +52,27 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <button onclick="document.getElementById('excelFileInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-xs px-3.5 py-1.5 rounded-xl text-white font-bold shadow-sm shadow-emerald-600/10 flex items-center gap-1.5 transition-all">
+                <button onclick="openNewEntityModal()" class="bg-white hover:bg-slate-50 text-slate-700 text-xs px-3 py-1.5 rounded-xl font-bold shadow-sm flex items-center gap-1.5 border border-slate-300 transition-all">
+                    <i class="fa-solid fa-plus text-blue-600"></i>
+                    <span class="hidden sm:inline">Nueva Sede</span>
+                </button>
+                <button onclick="runAnnualAiAnalysis()" class="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-xs px-3.5 py-1.5 rounded-xl text-white font-bold shadow-md flex items-center gap-1.5 transition-all">
+                    <i class="fa-solid fa-brain text-amber-300 animate-pulse"></i>
+                    <span>Auditoría IA Anual</span>
+                </button>
+                <button onclick="document.getElementById('excelFileInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-xs px-3 py-1.5 rounded-xl text-white font-bold shadow-sm flex items-center gap-1.5 transition-all">
                     <i class="fa-solid fa-file-excel"></i>
-                    <span class="hidden sm:inline">Subir Excel Mensual</span>
+                    <span class="hidden sm:inline">Subir Excel</span>
                 </button>
                 <input type="file" id="excelFileInput" accept=".xlsx, .xls" class="hidden" onchange="handleExcelUpload(event)">
-                <button onclick="window.print()" class="bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs px-2.5 py-1.5 rounded-xl font-medium shadow-sm border border-slate-300 transition-all">
+                <button onclick="window.print()" class="bg-white hover:bg-slate-50 text-slate-600 text-xs px-2.5 py-1.5 rounded-xl font-medium shadow-sm border border-slate-300 transition-all">
                     <i class="fa-solid fa-print"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- CONTENEDOR PRINCIPAL CON MENÚ LATERAL -->
+    <!-- ESTRUCTURA PRINCIPAL -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col md:flex-row gap-6">
 
         <!-- BARRA LATERAL IZQUIERDA -->
@@ -67,7 +85,7 @@
                 
                 <div class="border-t border-slate-100 my-2 pt-2"></div>
                 
-                <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1 uppercase tracking-wider">Módulos Detallados P&L</div>
+                <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1 uppercase tracking-wider">Módulos Detallados</div>
                 <button onclick="showModule('ingresos')" id="btn-mod-ingresos" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
                     <i class="fa-solid fa-sack-dollar text-emerald-600 w-4 text-center"></i> Ingresos
                 </button>
@@ -86,7 +104,6 @@
                 <button onclick="showModule('utilidad_neta')" id="btn-mod-utilidad_neta" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
                     <i class="fa-solid fa-scale-balanced text-indigo-600 w-4 text-center"></i> Utilidad Neta
                 </button>
-
                 <div class="border-t border-slate-100 my-2 pt-2"></div>
                 <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1 uppercase tracking-wider">Gestión Comercial</div>
                 <button onclick="showModule('ventas_vendedor')" id="btn-mod-ventas_vendedor" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
@@ -96,21 +113,31 @@
                     <i class="fa-solid fa-tags text-teal-600 w-4 text-center"></i> Ventas x Categoría
                 </button>
             </div>
+
+            <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-2">
+                <div class="flex items-center gap-2 text-blue-700">
+                    <i class="fa-solid fa-shield-halved text-sm"></i>
+                    <span class="text-xs font-bold uppercase tracking-wider">Normas NIIF / PYMES</span>
+                </div>
+                <p class="text-[11px] text-slate-500 leading-relaxed">
+                    Panel de gestión financiera para seguimiento de ingresos, costos, gastos y márgenes.
+                </p>
+            </div>
         </aside>
 
-        <!-- CONTENIDO CENTRAL -->
+        <!-- CONTENIDO PRINCIPAL -->
         <main class="flex-1 space-y-6">
 
-            <!-- DASHBOARD PRINCIPAL -->
+            <!-- DASHBOARD -->
             <div id="view-inicio" class="space-y-6">
                 <section class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm no-print">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Entidad / Sede</label>
                             <select id="entitySelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
-                                <option value="CONSOLIDADO">Consolidado Global</option>
-                                <option value="PIPE_AUDIO" selected>PIPE AUDIO</option>
-                                <option value="JD_AUDIO">JD AUDIO</option>
+                                <option value="CONSOLIDADO">01 — Consolidado Global</option>
+                                <option value="PIPE_AUDIO" selected>01 — PIPE AUDIO</option>
+                                <option value="JD_AUDIO">01 — JD AUDIO</option>
                             </select>
                         </div>
                         <div>
@@ -145,7 +172,7 @@
                     </div>
                 </section>
 
-                <!-- KPIS PRINCIPALES -->
+                <!-- KPIS -->
                 <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
                     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
                         <div class="text-slate-500 text-[11px] font-bold uppercase">1. Ingresos Netos</div>
@@ -186,14 +213,14 @@
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <h2 class="font-black text-slate-900 text-lg"><i class="fa-solid fa-user-tie text-blue-600 mr-2"></i> Ventas por Vendedor</h2>
-                        <p class="text-xs text-slate-500">Importe neto, participación y rentabilidad por vendedor según archivo cargado.</p>
+                        <p class="text-xs text-slate-500">Importe neto, participación y rentabilidad por vendedor.</p>
                     </div>
                     <div class="flex flex-wrap gap-2">
                         <select id="seller-entity" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('seller')">
-                            <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO">Consolidado</option>
+                            <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO" selected>Consolidado</option>
                         </select>
                         <select id="seller-period" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('seller')">
-                            <option value="2026-02">Febrero 2026</option><option value="2026-01">Enero 2026</option><option value="2026-Q1">1.er trimestre 2026</option><option value="2026-YTD">Acumulado 2026</option>
+                            <option value="2026-02" selected>Febrero 2026</option><option value="2026-01">Enero 2026</option>
                         </select>
                     </div>
                 </div>
@@ -214,14 +241,14 @@
                 <div class="flex flex-wrap items-center justify-between gap-3">
                     <div>
                         <h2 class="font-black text-slate-900 text-lg"><i class="fa-solid fa-tags text-teal-600 mr-2"></i> Ventas por Categoría</h2>
-                        <p class="text-xs text-slate-500">Comparativo y composición por línea comercial (Rines, Llanta, Taller, Almacén, Grúa).</p>
+                        <p class="text-xs text-slate-500">Comparativo mensual y acumulado por línea comercial.</p>
                     </div>
                     <div class="flex flex-wrap gap-2">
                         <select id="category-entity" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('category')">
-                            <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO">Consolidado</option>
+                            <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO" selected>Consolidado</option>
                         </select>
                         <select id="category-period" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('category')">
-                            <option value="2026-02">Febrero 2026</option><option value="2026-01">Enero 2026</option><option value="2026-Q1">1.er trimestre 2026</option><option value="2026-YTD">Acumulado 2026</option>
+                            <option value="2026-02" selected>Febrero 2026</option><option value="2026-01">Enero 2026</option>
                         </select>
                     </div>
                 </div>
@@ -253,36 +280,13 @@
         const MONTH_ORDER = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
         const MODULES = ['inicio', 'ingresos', 'costos', 'gastos_op', 'gastos_fin', 'otros_ing', 'utilidad_neta', 'ventas_vendedor', 'ventas_categoria'];
 
-        let DB = {
-            "PIPE_AUDIO": {
-                "ENERO": {ing_brutos:415320909,dev_ventas:5807764,costo_ventas:249290144,gastos_admin:86704160,gastos_ventas:5666362,gastos_fin:10921140,otros_ing:29040600},
-                "FEBRERO": {ing_brutos:332105856,dev_ventas:1304369,costo_ventas:173516384,gastos_admin:85526677,gastos_ventas:4720464,gastos_fin:8167619,otros_ing:24884509},
-                "MARZO": {ing_brutos:438383021,dev_ventas:1882352,costo_ventas:235674108,gastos_admin:83933317,gastos_ventas:6225564,gastos_fin:11639099,otros_ing:24910088},
-                "ABRIL": {ing_brutos:384177952,dev_ventas:1605042,costo_ventas:240443533,gastos_admin:96698528,gastos_ventas:8532517,gastos_fin:11551298,otros_ing:16703062},
-                "MAYO": {ing_brutos:427369698,dev_ventas:3192058,costo_ventas:259838484,gastos_admin:85250098,gastos_ventas:16373128,gastos_fin:11276041,otros_ing:25582902},
-                "JUNIO": {ing_brutos:337348195,dev_ventas:1593865,costo_ventas:181336237,gastos_admin:92047957,gastos_ventas:10651113,gastos_fin:10538363,otros_ing:28227508},
-                "JULIO": {ing_brutos:491311321,dev_ventas:10109243,costo_ventas:268617073,gastos_admin:90086287,gastos_ventas:9294368,gastos_fin:8783989,otros_ing:27218000},
-                "AGOSTO": {ing_brutos:400966434,dev_ventas:1774621,costo_ventas:206174490,gastos_admin:101490834,gastos_ventas:11180623,gastos_fin:9961811,otros_ing:30954842},
-                "SEPTIEMBRE": {ing_brutos:582534231,dev_ventas:18264201,costo_ventas:314050506,gastos_admin:96269306,gastos_ventas:9325140,gastos_fin:11959137,otros_ing:33112427}
-            },
-            "JD_AUDIO": {
-                "ENERO": {ing_brutos:71841184,dev_ventas:3184875,costo_ventas:38477236,gastos_admin:10620854,gastos_ventas:3929133,gastos_fin:386710,otros_ing:0},
-                "FEBRERO": {ing_brutos:51125972,dev_ventas:899159,costo_ventas:25565984,gastos_admin:11923114,gastos_ventas:3195835,gastos_fin:334560,otros_ing:0},
-                "MARZO": {ing_brutos:74017193,dev_ventas:1285714,costo_ventas:42051139,gastos_admin:9245707,gastos_ventas:3262475,gastos_fin:502075,otros_ing:0},
-                "ABRIL": {ing_brutos:83314025,dev_ventas:478991,costo_ventas:49353512,gastos_admin:12681945,gastos_ventas:3230265,gastos_fin:646279,otros_ing:0},
-                "MAYO": {ing_brutos:86365389,dev_ventas:1343949,costo_ventas:54175702,gastos_admin:11566288,gastos_ventas:3290245,gastos_fin:834124,otros_ing:0},
-                "JUNIO": {ing_brutos:67585740,dev_ventas:1765344,costo_ventas:37232157,gastos_admin:9576467,gastos_ventas:3267985,gastos_fin:851793,otros_ing:0},
-                "JULIO": {ing_brutos:76785710,dev_ventas:0,costo_ventas:47685018,gastos_admin:10075672,gastos_ventas:3267705,gastos_fin:393850,otros_ing:0},
-                "AGOSTO": {ing_brutos:58997168,dev_ventas:58823,costo_ventas:31629744,gastos_admin:12832324,gastos_ventas:3391835,gastos_fin:459341,otros_ing:0},
-                "SEPTIEMBRE": {ing_brutos:57844832,dev_ventas:400000,costo_ventas:31762146,gastos_admin:9198943,gastos_ventas:3354885,gastos_fin:219191,otros_ing:0}
-            }
-        };
+        // BASE DE DATOS CONTABLE OFICIAL COMPLETA (ENERO A SEPTIEMBRE 2026)
+        let DB = {"PIPE_AUDIO":{"ENERO":{"ing_brutos":415320909.594706,"dev_ventas":5807764.70470588,"costo_ventas":249290144.81,"gastos_admin":86704160.72999999,"gastos_ventas":5666362.21,"gastos_fin":10921140.48852953,"otros_ing":29040600.0},"FEBRERO":{"ing_brutos":332105856.8,"dev_ventas":1304369.75,"costo_ventas":173516384.23000014,"gastos_admin":85526677.22000001,"gastos_ventas":4720464.0,"gastos_fin":8167619.18772356,"otros_ing":24884509.0},"MARZO":{"ing_brutos":438383021.56,"dev_ventas":1882352.94,"costo_ventas":235674108.25,"gastos_admin":83933317.38999999,"gastos_ventas":6225564.0,"gastos_fin":11639099.622213613,"otros_ing":24910088.0},"ABRIL":{"ing_brutos":384177952.26000005,"dev_ventas":1605042.01,"costo_ventas":240443533.76000005,"gastos_admin":96698528.22,"gastos_ventas":8532517.0,"gastos_fin":11551298.94338631,"otros_ing":16703062.58},"MAYO":{"ing_brutos":427369698.94,"dev_ventas":3192058.82,"costo_ventas":259838484.49299997,"gastos_admin":85250098.48,"gastos_ventas":16373128.0,"gastos_fin":11276041.289999997,"otros_ing":25582902.76},"JUNIO":{"ing_brutos":337348195.4300001,"dev_ventas":1593865.55,"costo_ventas":181336237.60000002,"gastos_admin":92047957.61000001,"gastos_ventas":10651113.0,"gastos_fin":10538363.03187199,"otros_ing":28227508.41},"JULIO":{"ing_brutos":491311321.31000006,"dev_ventas":10109243.7,"costo_ventas":268617073.81000006,"gastos_admin":90086287.75000001,"gastos_ventas":9294368.0,"gastos_fin":8783989.978962515,"otros_ing":27218000.0},"AGOSTO":{"ing_brutos":400966434.71,"dev_ventas":1774621.0,"costo_ventas":206174490.2700001,"gastos_admin":101490834.78999999,"gastos_ventas":11180623.0,"gastos_fin":9961811.26,"otros_ing":30954842.0},"SEPTIEMBRE":{"ing_brutos":582534231.63,"dev_ventas":18264201.669999998,"costo_ventas":314050506.48868585,"gastos_admin":96269306.13000001,"gastos_ventas":9325140.0,"gastos_fin":11959137.63291551,"otros_ing":33112427.0},"OCTUBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0},"NOVIEMBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0},"DICIEMBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0}},"JD_AUDIO":{"ENERO":{"ing_brutos":71841184.11,"dev_ventas":3184875.0,"costo_ventas":38477236.221,"gastos_admin":10620854.73,"gastos_ventas":3929133.16,"gastos_fin":386710.961470471,"otros_ing":0.0},"FEBRERO":{"ing_brutos":51125972.24,"dev_ventas":899159.66,"costo_ventas":25565984.779999997,"gastos_admin":11923114.350000001,"gastos_ventas":3195835.0,"gastos_fin":334560.33227644407,"otros_ing":0.0},"MARZO":{"ing_brutos":74017193.22999999,"dev_ventas":1285714.29,"costo_ventas":42051139.23199999,"gastos_admin":9245707.83,"gastos_ventas":3262475.0,"gastos_fin":502075.0,"otros_ing":0.0},"ABRIL":{"ing_brutos":83314025.22999999,"dev_ventas":478991.6,"costo_ventas":49353512.077,"gastos_admin":12681945.81,"gastos_ventas":3230265.0,"gastos_fin":646279.866613686,"otros_ing":0.0},"MAYO":{"ing_brutos":86365389.57999998,"dev_ventas":1343949.59,"costo_ventas":54175702.828,"gastos_admin":11566288.38,"gastos_ventas":3290245.0,"gastos_fin":834124.0,"otros_ing":0.0},"JUNIO":{"ing_brutos":67585740.47,"dev_ventas":1765344.54,"costo_ventas":37232157.44,"gastos_admin":9576467.540000001,"gastos_ventas":3267985.0,"gastos_fin":851793.7481280074,"otros_ing":0.0},"JULIO":{"ing_brutos":76785710.84,"dev_ventas":0.0,"costo_ventas":47685018.35,"gastos_admin":10075672.43,"gastos_ventas":3267705.0,"gastos_fin":393850.0910374862,"otros_ing":0.0},"AGOSTO":{"ing_brutos":58997168.02,"dev_ventas":58823.53,"costo_ventas":31629744.81,"gastos_admin":12832324.78,"gastos_ventas":3391835.12,"gastos_fin":459341.99,"otros_ing":0.0},"SEPTIEMBRE":{"ing_brutos":57844832.349999994,"dev_ventas":400000.0,"costo_ventas":31762146.88,"gastos_admin":9198943.0,"gastos_ventas":3354885.12,"gastos_fin":219191.60708449077,"otros_ing":0.0},"OCTUBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0},"NOVIEMBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0},"DICIEMBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0}}};
 
-        // DATOS COMERCIALES INICIALES (DEMO / EJEMPLO)
-        let FINSALES_KEY = 'finsight_cfo_sales_v2';
+        // BASE DE DATOS COMERCIAL INICIAL (VENDEDORES Y CATEGORÍAS)
+        let FINSALES_KEY = 'finsight_cfo_sales_v3';
         let FINSALES = JSON.parse(localStorage.getItem(FINSALES_KEY) || '{"seller":[],"category":[]}');
 
-        // Si no hay datos comerciales guardados, sembramos datos iniciales basados en tus formatos
         if(FINSALES.seller.length === 0) {
             FINSALES.seller = [
                 {entity:'PIPE_AUDIO', year:2026, month:2, name:'JOSEPH', value:113370167, profit:40.64},
@@ -409,28 +413,13 @@
             }).join('');
         }
 
-        function periodMonths(p){ 
-            if(p.endsWith('-Q1')) return [1,2,3]; 
-            if(p.endsWith('-YTD')) return [1,2,3,4,5,6,7,8,9,10,11,12]; 
-            return [Number(p.slice(5,7))]; 
-        }
-
-        function periodLabel(p){
-            return p.endsWith('-Q1') ? 'Q1 2026' : p.endsWith('-YTD') ? 'Acumulado 2026' : new Date(Number(p.slice(0,4)), Number(p.slice(5,7))-1, 1).toLocaleDateString('es-CO',{month:'long',year:'numeric'});
-        }
-
         function renderSalesModule(type){
             const isSeller = type === 'seller', key = isSeller ? 'seller' : 'category';
-            const entity = document.getElementById(isSeller ? 'seller-entity' : 'category-entity')?.value || 'PIPE_AUDIO';
+            const entity = document.getElementById(isSeller ? 'seller-entity' : 'category-entity')?.value || 'CONSOLIDADO';
             const period = document.getElementById(isSeller ? 'seller-period' : 'category-period')?.value || '2026-02';
-            const months = periodMonths(period);
+            const months = [Number(period.slice(5,7))];
 
-            let records = [];
-            if(entity === 'CONSOLIDADO') {
-                records = FINSALES[key].filter(r => r.year === 2026 && months.includes(r.month));
-            } else {
-                records = FINSALES[key].filter(r => r.entity === entity && r.year === 2026 && months.includes(r.month));
-            }
+            let records = entity === 'CONSOLIDADO' ? FINSALES[key].filter(r => r.year === 2026 && months.includes(r.month)) : FINSALES[key].filter(r => r.entity === entity && r.year === 2026 && months.includes(r.month));
 
             const group = {};
             records.forEach(r => {
@@ -443,53 +432,34 @@
             const total = Object.values(group).reduce((a, b) => a + b.value, 0);
             const rows = Object.entries(group).sort((a, b) => b[1].value - a[1].value);
 
-            const summaryId = isSeller ? 'seller-summary' : 'category-summary';
-            const tableId = isSeller ? 'seller-table' : 'category-table';
-
-            document.getElementById(summaryId).innerHTML = [
-                ['Ventas del periodo', formatCOP(total)],
-                ['Registros procesados', records.length],
-                ['Periodo consultado', periodLabel(period)]
+            document.getElementById(isSeller ? 'seller-summary' : 'category-summary').innerHTML = [
+                ['Ventas del periodo', formatCOP(total)], ['Registros', records.length], ['Periodo', period]
             ].map(x => `<div class="bg-slate-50 border border-slate-200 rounded-xl p-3"><div class="text-[10px] uppercase font-bold text-slate-500">${x[0]}</div><div class="font-black text-slate-900 mt-1">${x[1]}</div></div>`).join('');
 
-            document.getElementById(tableId).innerHTML = rows.map(([name, v]) => `
+            document.getElementById(isSeller ? 'seller-table' : 'category-table').innerHTML = rows.map(([name, v]) => `
                 <tr class="border-t border-slate-100 hover:bg-slate-50/50">
                     <td class="p-3 font-bold text-slate-800">${name}</td>
                     <td class="p-3 text-right font-mono font-semibold">${formatCOP(v.value)}</td>
                     <td class="p-3 text-right font-mono">${total > 0 ? (v.value / total * 100).toFixed(2) + '%' : '—'}</td>
-                    <td class="p-3 text-right font-mono">${isSeller && v.profit != null ? v.profit.toFixed(2) + '%' : (isSeller ? 'N/D' : 'Consolidado línea')}</td>
+                    <td class="p-3 text-right font-mono">${isSeller && v.profit != null ? v.profit.toFixed(2) + '%' : 'N/D'}</td>
                 </tr>
-            `).join('') || `<tr><td colspan="4" class="p-6 text-center text-slate-500 font-medium">Sin registros importados para este filtro. Sube un archivo Excel para alimentar este módulo.</td></tr>`;
-
-            document.getElementById(isSeller ? 'seller-note' : 'category-note').textContent = records.length ? 
-                `Mostrando información de ${records.length} registros reales almacenados para ${periodLabel(period)} (${entity}).` : 
-                `No hay datos para este filtro. Usa el botón "Subir Excel Mensual" para importar el informe comercial correspondiente.`;
+            `).join('') || `<tr><td colspan="4" class="p-6 text-center text-slate-500 font-medium">Sin registros para este periodo. Sube un archivo Excel.</td></tr>`;
         }
 
-        // IMPORTADOR INTELIGENTE DE EXCEL EN LA WEB
         async function handleExcelUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
             try {
                 const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
                 const fname = file.name.toLowerCase();
-                let kind = fname.includes('vendedor') ? 'seller' : (fname.includes('categoria') || fname.includes('categoría')) ? 'category' : 'finance';
+                let kind = fname.includes('vendedor') ? 'seller' : 'category';
                 
-                if(kind === 'finance') {
-                    alert('Archivo financiero detectado. Para actualizar el P&L general, asegúrate de utilizar la estructura estándar de las sedes.');
-                    return;
-                }
-
-                const entityRaw = prompt('¿A qué sede pertenece este archivo? Escribe PIPE_AUDIO o JD_AUDIO:', 'PIPE_AUDIO');
+                const entityRaw = prompt('¿Sede (PIPE_AUDIO o JD_AUDIO):', 'PIPE_AUDIO');
                 if(!entityRaw) return;
                 const entity = entityRaw.trim().toUpperCase().replace(/\s+/g, '_');
-                if(!['PIPE_AUDIO', 'JD_AUDIO'].includes(entity)) {
-                    alert('Sede no válida. Debe ser PIPE_AUDIO o JD_AUDIO.');
-                    return;
-                }
-
-                const monthNum = prompt('¿A qué mes corresponde este informe (número de 1 a 12, ej. 2 para Febrero)?', '2');
-                if(!monthNum ||isNaN(monthNum)) return;
+                
+                const monthNum = prompt('¿Mes (1-12, ej. 2 para Febrero):', '2');
+                if(!monthNum) return;
                 const m = Number(monthNum);
 
                 const ws = wb.Sheets[wb.SheetNames[0]];
@@ -498,62 +468,40 @@
 
                 if(kind === 'seller') {
                     let headerIdx = grid.findIndex(row => row.some(c => String(c||'').toLowerCase().includes('vendedor')));
-                    if(headerIdx < 0) throw new Error('No se encontró la columna Vendedor en el archivo.');
                     const hdr = grid[headerIdx].map(x => String(x||'').toLowerCase().trim());
                     const nameIdx = hdr.findIndex(x => x.includes('vendedor'));
                     const valueIdx = hdr.findIndex(x => x === 'neto' || x.includes('neto'));
                     const profitIdx = hdr.findIndex(x => x.includes('rent'));
-                    if(nameIdx < 0 || valueIdx < 0) throw new Error('El archivo de vendedor debe contener columnas de Vendedor y Neto.');
-
                     for(const row of grid.slice(headerIdx + 1)) {
                         const name = String(row[nameIdx] || '').trim();
                         const value = Number(row[valueIdx]);
                         if(!name || /total/i.test(name) || !Number.isFinite(value)) continue;
-                        const profit = profitIdx >= 0 && Number.isFinite(Number(row[profitIdx])) ? Number(row[profitIdx]) : null;
-                        imported.push({ entity, year: 2026, month: m, name, value, profit, source: file.name });
+                        const profit = profitIdx >= 0 ? Number(row[profitIdx]) : null;
+                        imported.push({ entity, year: 2026, month: m, name, value, profit });
                     }
                 } else {
-                    let headerIdx = grid.findIndex(row => row.some(c => String(c||'').toLowerCase().includes('productos y servicios') || String(c||'').toLowerCase().includes('categoría')));
-                    if(headerIdx < 0) headerIdx = 0; // fallback
-                    const hdr = grid[headerIdx].map(x => String(x||'').toLowerCase().trim());
-                    const nameIdx = hdr.findIndex(x => x.includes('producto') || x.includes('categoría') || x.includes('servicios')) >= 0 ? hdr.findIndex(x => x.includes('producto') || x.includes('categoría') || x.includes('servicios')) : 0;
-                    
-                    // Buscar columna numérica del mes o tomar la última columna relevante
-                    for(const row of grid.slice(headerIdx + 1)) {
-                        const name = String(row[nameIdx] || '').trim();
-                        if(!name || /total/i.test(name)) continue;
-                        // Tomar el primer valor numérico válido de la fila como monto del mes
-                        let val = 0;
-                        for(let c = 1; c < row.length; c++) {
-                            if(Number.isFinite(Number(row[c])) && Number(row[c]) > 1000) {
-                                val = Number(row[c]);
-                                break;
-                            }
-                        }
-                        if(val > 0) {
-                            imported.push({ entity, year: 2026, month: m, name: name.toUpperCase(), value: val, source: file.name });
-                        }
+                    for(const row of grid.slice(2)) {
+                        const name = String(row[0] || '').trim();
+                        const value = Number(row[2] || row[1]); // mes febrero o enero
+                        if(!name || /total/i.test(name) || !Number.isFinite(value)) continue;
+                        imported.push({ entity, year: 2026, month: m, name: name.toUpperCase(), value });
                     }
                 }
 
-                if(!imported.length) throw new Error('No se detectaron filas válidas para importar.');
-
-                // Política de reemplazo por sede y mes para evitar duplicados
                 FINSALES[kind] = FINSALES[kind].filter(r => !(r.entity === entity && r.month === m && r.year === 2026));
                 FINSALES[kind].push(...imported);
                 localStorage.setItem(FINSALES_KEY, JSON.stringify(FINSALES));
 
-                alert(`¡Importación exitosa! Se guardaron ${imported.length} registros comerciales para ${entity} (Mes ${m}). Los módulos se han actualizado.`);
+                alert(`¡Importación exitosa! ${imported.length} registros guardados.`);
                 showModule(kind === 'seller' ? 'ventas_vendedor' : 'ventas_categoria');
-
             } catch(err) {
-                alert('Error al procesar el archivo Excel: ' + err.message);
+                alert('Error al procesar archivo: ' + err.message);
             } finally {
                 event.target.value = '';
             }
         }
 
-        window.onload = function() { handleReportTypeChange(); };
+        window.onload = function() { renderDashboard(); };
     </script>
 </body>
 </html>

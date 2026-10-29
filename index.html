@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { -webkit-tap-highlight-color: transparent; user-select: none; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
         @media print { .no-print { display: none !important; } }
@@ -14,7 +15,6 @@
         ::-webkit-scrollbar-track { background: #f1f5f9; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-[#f8fafc] text-slate-800 min-h-screen antialiased pb-12">
 
@@ -38,7 +38,7 @@
     </header>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col md:flex-row gap-6">
-        <!-- BARRA LATERAL CON NUEVOS MÓDULOS -->
+        <!-- BARRA LATERAL -->
         <aside class="w-full md:w-64 shrink-0 space-y-3 no-print">
             <div class="bg-white rounded-2xl p-3 border border-slate-200 shadow-sm space-y-1">
                 <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1.5 uppercase">Menú Principal</div>
@@ -78,9 +78,9 @@
             </div>
         </aside>
 
-        <!-- CONTENIDO PRINCIPAL -->
+        <!-- CONTENIDO -->
         <main class="flex-1 space-y-6">
-            <!-- DASHBOARD -->
+            <!-- DASHBOARD PRINCIPAL -->
             <div id="view-inicio" class="space-y-6">
                 <section class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -126,13 +126,23 @@
                         <div id="kpiUtilNeta" class="text-base sm:text-lg font-black text-emerald-600 mt-1">$0</div>
                     </div>
                 </section>
+
+                <section class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <h3 class="text-sm font-extrabold text-slate-900 mb-4"><i class="fa-solid fa-table text-blue-600"></i> Estado de Resultados P&L</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs text-left text-slate-700">
+                            <thead id="plTableHead" class="text-[10px] uppercase bg-slate-50 text-slate-600 border-b border-slate-200 font-extrabold"></thead>
+                            <tbody id="plTableBody" class="divide-y divide-slate-100 font-mono"></tbody>
+                        </table>
+                    </div>
+                </section>
             </div>
 
             <!-- MÓDULO: VENTAS POR VENDEDOR -->
             <div id="view-vendedores" class="space-y-5 hidden">
                 <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
                     <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-user-tie text-blue-600"></i> Ventas por Vendedor
+                        <i class="fa-solid fa-user-tie text-blue-600"></i> Ventas por Vendedor (Joseph, Luis Pineda, Andrés, Juan Diego, Dario Cogollo, María José, Carlos, Pipes Audio)
                     </h2>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs text-left text-slate-700">
@@ -156,7 +166,7 @@
             <div id="view-categorias" class="space-y-5 hidden">
                 <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
                     <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                        <i class="fa-solid fa-tags text-teal-600"></i> Ventas por Categoría de Productos
+                        <i class="fa-solid fa-tags text-teal-600"></i> Ventas por Categoría de Productos (Rines, Llanta, Taller, Almacén)
                     </h2>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs text-left text-slate-700">
@@ -179,7 +189,34 @@
     </div>
 
     <script>
-        const DB_COMERCIAL = {
+        const MONTH_ORDER = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE"];
+        
+        let DB = {
+            "PIPE_AUDIO": {
+                "ENERO": {ing_brutos:415320909,dev_ventas:5807764,costo_ventas:249290144,gastos_admin:86704160,gastos_ventas:5666362,gastos_fin:10921140,otros_ing:29040600},
+                "FEBRERO": {ing_brutos:332105856,dev_ventas:1304369,costo_ventas:173516384,gastos_admin:85526677,gastos_ventas:4720464,gastos_fin:8167619,otros_ing:24884509},
+                "MARZO": {ing_brutos:438383021,dev_ventas:1882352,costo_ventas:235674108,gastos_admin:83933317,gastos_ventas:6225564,gastos_fin:11639099,otros_ing:24910088},
+                "ABRIL": {ing_brutos:384177952,dev_ventas:1605042,costo_ventas:240443533,gastos_admin:96698528,gastos_ventas:8532517,gastos_fin:11551298,otros_ing:16703062},
+                "MAYO": {ing_brutos:427369698,dev_ventas:3192058,costo_ventas:259838484,gastos_admin:85250098,gastos_ventas:16373128,gastos_fin:11276041,otros_ing:25582902},
+                "JUNIO": {ing_brutos:337348195,dev_ventas:1593865,costo_ventas:181336237,gastos_admin:92047957,gastos_ventas:10651113,gastos_fin:10538363,otros_ing:28227508},
+                "JULIO": {ing_brutos:491311321,dev_ventas:10109243,costo_ventas:268617073,gastos_admin:90086287,gastos_ventas:9294368,gastos_fin:8783989,otros_ing:27218000},
+                "AGOSTO": {ing_brutos:400966434,dev_ventas:1774621,costo_ventas:206174490,gastos_admin:101490834,gastos_ventas:11180623,gastos_fin:9961811,otros_ing:30954842},
+                "SEPTIEMBRE": {ing_brutos:582534231,dev_ventas:18264201,costo_ventas:314050506,gastos_admin:96269306,gastos_ventas:9325140,gastos_fin:11959137,otros_ing:33112427}
+            },
+            "JD_AUDIO": {
+                "ENERO": {ing_brutos:71841184,dev_ventas:3184875,costo_ventas:38477236,gastos_admin:10620854,gastos_ventas:3929133,gastos_fin:386710,otros_ing:0},
+                "FEBRERO": {ing_brutos:51125972,dev_ventas:899159,costo_ventas:25565984,gastos_admin:11923114,gastos_ventas:3195835,gastos_fin:334560,otros_ing:0},
+                "MARZO": {ing_brutos:74017193,dev_ventas:1285714,costo_ventas:42051139,gastos_admin:9245707,gastos_ventas:3262475,gastos_fin:502075,otros_ing:0},
+                "ABRIL": {ing_brutos:83314025,dev_ventas:478991,costo_ventas:49353512,gastos_admin:12681945,gastos_ventas:3230265,gastos_fin:646279,otros_ing:0},
+                "MAYO": {ing_brutos:86365389,dev_ventas:1343949,costo_ventas:54175702,gastos_admin:11566288,gastos_ventas:3290245,gastos_fin:834124,otros_ing:0},
+                "JUNIO": {ing_brutos:67585740,dev_ventas:1765344,costo_ventas:37232157,gastos_admin:9576467,gastos_ventas:3267985,gastos_fin:851793,otros_ing:0},
+                "JULIO": {ing_brutos:76785710,dev_ventas:0,costo_ventas:47685018,gastos_admin:10075672,gastos_ventas:3267705,gastos_fin:393850,otros_ing:0},
+                "AGOSTO": {ing_brutos:58997168,dev_ventas:58823,costo_ventas:31629744,gastos_admin:12832324,gastos_ventas:3391835,gastos_fin:459341,otros_ing:0},
+                "SEPTIEMBRE": {ing_brutos:57844832,dev_ventas:400000,costo_ventas:31762146,gastos_admin:9198943,gastos_ventas:3354885,gastos_fin:219191,otros_ing:0}
+            }
+        };
+
+        let DB_COMERCIAL = {
             vendedores: [
                 { nombre: "JOSEPH", q1: 180000000, q2: 195000000, q3: 210000000 },
                 { nombre: "LUIS PINEDA", q1: 150000000, q2: 160000000, q3: 175000000 },
@@ -225,12 +262,75 @@
         function formatCOP(val) { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val); }
         function formatPct(val) { return (val * 100).toFixed(1) + '%'; }
 
+        function getActiveMonths() {
+            const range = document.getElementById('rangePeriodSelect').value;
+            if (range === 'Q1') return ["ENERO", "FEBRERO", "MARZO"];
+            if (range === 'Q2') return ["ABRIL", "MAYO", "JUNIO"];
+            if (range === 'Q3') return ["JULIO", "AGOSTO", "SEPTIEMBRE"];
+            return MONTH_ORDER;
+        }
+
+        function aggregateRawData(entity, months) {
+            let agg = { ing_brutos: 0, dev_ventas: 0, costo_ventas: 0, gastos_admin: 0, gastos_ventas: 0, gastos_fin: 0, otros_ing: 0 };
+            months.forEach(m => {
+                if (entity === 'CONSOLIDADO') {
+                    Object.keys(DB).forEach(eKey => {
+                        const ent = DB[eKey][m] || {};
+                        Object.keys(agg).forEach(k => agg[k] += (ent[k] || 0));
+                    });
+                } else {
+                    const e = DB[entity] ? (DB[entity][m] || {}) : {};
+                    Object.keys(agg).forEach(k => agg[k] += (e[k] || 0));
+                }
+            });
+            return agg;
+        }
+
+        function calculatePL(raw) {
+            const ing_netos = (raw.ing_brutos || 0) - (raw.dev_ventas || 0);
+            const costo_ventas = raw.costo_ventas || 0;
+            const util_bruta = ing_netos - costo_ventas;
+            const gastos_op = (raw.gastos_admin || 0) + (raw.gastos_ventas || 0);
+            const util_op = util_bruta - gastos_op;
+            const util_neta = util_op - (raw.gastos_fin || 0) + (raw.otros_ing || 0);
+            return { ing_netos, costo_ventas, util_bruta, gastos_op, util_op, util_neta };
+        }
+
         function renderDashboard() {
-            document.getElementById('kpiIngNetos').innerText = formatCOP(1444663921);
-            document.getElementById('kpiCostoVentas').innerText = formatCOP(788842071);
-            document.getElementById('kpiGastosOperativos').innerText = formatCOP(317646560);
-            document.getElementById('kpiUtilBruta').innerText = formatCOP(655821851);
-            document.getElementById('kpiUtilNeta').innerText = formatCOP(398755621);
+            const entity = document.getElementById('entitySelect').value;
+            const months = getActiveMonths();
+            const curr = calculatePL(aggregateRawData(entity, months));
+
+            document.getElementById('kpiIngNetos').innerText = formatCOP(curr.ing_netos);
+            document.getElementById('kpiCostoVentas').innerText = formatCOP(curr.costo_ventas);
+            document.getElementById('kpiGastosOperativos').innerText = formatCOP(curr.gastos_op);
+            document.getElementById('kpiUtilBruta').innerText = formatCOP(curr.util_bruta);
+            document.getElementById('kpiUtilNeta').innerText = formatCOP(curr.util_neta);
+
+            const thead = document.getElementById('plTableHead');
+            const tbody = document.getElementById('plTableBody');
+            thead.innerHTML = `<tr><th class="py-2.5 px-3">Concepto P&L</th>` + months.map(m => `<th class="py-2.5 px-3 text-right">${m.substring(0,3)}</th>`).join('') + `<th class="py-2.5 px-3 text-right bg-emerald-50 text-emerald-800">TOTAL</th></tr>`;
+            
+            const rows = [
+                { label: 'Ingresos Operacionales Netos', key: 'ing_netos' },
+                { label: '(-) Costo de Ventas', key: 'costo_ventas' },
+                { label: 'UTILIDAD BRUTA', key: 'util_bruta', bold: true },
+                { label: '(-) Gastos Operativos', key: 'gastos_op' },
+                { label: 'UTILIDAD OPERATIVA (EBIT)', key: 'util_op', bold: true },
+                { label: 'UTILIDAD NETA', key: 'util_neta', bold: true, highlight: 'text-emerald-700 bg-emerald-50/50' }
+            ];
+
+            tbody.innerHTML = rows.map(r => {
+                let html = `<tr class="${r.bold ? 'font-bold bg-slate-50' : ''}"><td class="py-2 px-3 ${r.highlight || ''}">${r.label}</td>`;
+                let sum = 0;
+                months.forEach(m => {
+                    const val = calculatePL(aggregateRawData(entity, [m]))[r.key];
+                    sum += val;
+                    html += `<td class="py-2 px-3 text-right">${formatCOP(val)}</td>`;
+                });
+                html += `<td class="py-2 px-3 text-right font-black ${r.highlight || 'text-emerald-800'}">${formatCOP(sum)}</td></tr>`;
+                return html;
+            }).join('');
         }
 
         function renderVendedores() {

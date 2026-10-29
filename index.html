@@ -1,507 +1,431 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FinSight CFO — Grupo Empresarial Importadora PPAM S.A.S.</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="FinSight CFO">
-    <meta name="theme-color" content="#ffffff">
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <style>
-        body { -webkit-tap-highlight-color: transparent; user-select: none; }
-        @media print { .no-print { display: none !important; } }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    </style>
-    <style id="finsight-local-utility-css">
-*,*::before,*::after{box-sizing:border-box}html{line-height:1.5;-webkit-text-size-adjust:100%;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{margin:0}button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}button:disabled{cursor:not-allowed;opacity:.55}img,canvas,svg{display:block;max-width:100%}table{border-collapse:collapse;text-indent:0;border-color:inherit}th{text-align:left}button,input,select{margin:0}input[type=file]{max-width:100%}
-:root{--slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;--slate-400:#94a3b8;--slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;--slate-900:#0f172a;--blue-50:#eff6ff;--blue-100:#dbeafe;--blue-200:#bfdbfe;--blue-600:#2563eb;--blue-700:#1d4ed8;--blue-800:#1e40af;--blue-900:#1e3a8a;--indigo-50:#eef2ff;--indigo-100:#e0e7ff;--indigo-600:#4f46e5;--indigo-700:#4338ca;--indigo-800:#3730a3;--indigo-900:#312e81;--violet-600:#7c3aed;--violet-700:#6d28d9;--emerald-50:#ecfdf5;--emerald-100:#d1fae5;--emerald-200:#a7f3d0;--emerald-300:#6ee7b7;--emerald-600:#059669;--emerald-700:#047857;--emerald-800:#065f46;--emerald-900:#064e3b;--emerald-950:#022c22;--rose-50:#fff1f2;--rose-600:#e11d48;--rose-700:#be123c;--rose-800:#9f1239;--red-50:#fef2f2;--red-600:#dc2626;--red-700:#b91c1c;--amber-50:#fffbeb;--amber-200:#fde68a;--amber-300:#fcd34d;--amber-600:#d97706;--amber-700:#b45309;--amber-800:#92400e;--amber-900:#78350f;--sky-50:#f0f9ff;--sky-600:#0284c7;--sky-700:#0369a1;--sky-800:#075985;--teal-600:#0d9488}
-.bg-white{background-color:#fff}.bg-white\/95{background-color:rgba(255,255,255,.95)}.bg-\[\#f8fafc\]{background-color:#f8fafc}.bg-slate-50{background-color:#f8fafc}.bg-slate-100{background-color:#f1f5f9}.bg-slate-900\/50{background-color:rgba(15,23,42,.5)}.bg-blue-50{background-color:#eff6ff}.bg-blue-100{background-color:#dbeafe}.bg-blue-600{background-color:#2563eb}.bg-emerald-50{background-color:#ecfdf5}.bg-emerald-100{background-color:#d1fae5}.bg-emerald-600{background-color:#059669}.bg-amber-50{background-color:#fffbeb}.bg-rose-50{background-color:#fff1f2}.bg-indigo-50{background-color:#eef2ff}.bg-red-50{background-color:#fef2f2}
-.text-white{color:#fff}.text-slate-400{color:#94a3b8}.text-slate-500{color:#64748b}.text-slate-600{color:#475569}.text-slate-700{color:#334155}.text-slate-800{color:#1e293b}.text-slate-900{color:#0f172a}.text-blue-600{color:#2563eb}.text-blue-700{color:#1d4ed8}.text-blue-800{color:#1e40af}.text-blue-900{color:#1e3a8a}.text-indigo-600{color:#4f46e5}.text-emerald-600{color:#059669}.text-emerald-700{color:#047857}.text-emerald-800{color:#065f46}.text-rose-600{color:#e11d48}.text-amber-600{color:#d97706}.text-sky-600{color:#0284c7}.text-teal-600{color:#0d9488}
-.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none!important}.fixed{position:fixed}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0}.top-0{top:0}.z-50{z-index:50}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.w-full{width:100%}.min-h-screen{min-height:100vh}.max-w-7xl{max-width:80rem}.mx-auto{margin-left:auto;margin-right:auto}.p-3{padding:.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-12{padding-top:3rem;padding-bottom:3rem}.gap-2{gap:.5rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-1>:not([hidden])~:not([hidden]){margin-top:.25rem}.space-y-3>:not([hidden])~:not([hidden]){margin-top:.75rem}.space-y-4>:not([hidden])~:not([hidden]){margin-top:1rem}.space-y-5>:not([hidden])~:not([hidden]){margin-top:1.25rem}.space-y-6>:not([hidden])~:not([hidden]){margin-top:1.5rem}.space-x-2>:not([hidden])~:not([hidden]){margin-left:.5rem}.space-x-3>:not([hidden])~:not([hidden]){margin-left:.75rem}
-.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.rounded-2xl{border-radius:1rem}.rounded-xl{border-radius:.75rem}.border{border-width:1px;border-style:solid}.border-b{border-bottom:1px solid}.border-t{border-top:1px solid}.border-slate-200{border-color:#e2e8f0}.border-slate-300{border-color:#cbd5e1}.font-sans{font-family:ui-sans-serif,system-ui,sans-serif}.font-mono{font-family:ui-monospace,monospace}.font-semibold{font-weight:600}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-black{font-weight:900}.text-xs{font-size:.75rem}.text-sm{font-size:.875rem}.text-base{font-size:1rem}.text-lg{font-size:1.125rem}.uppercase{text-transform:uppercase}.tracking-tight{letter-spacing:-.025em}.shadow-sm{box-shadow:0 1px 2px 0 rgba(0,0,0,.05)}.backdrop-blur{backdrop-filter:blur(8px)}
-@media(min-width:640px){.sm\:flex-row{flex-direction:row}.sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.sm\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:p-5{padding:1.25rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:text-sm{font-size:.875rem}}
-@media(min-width:768px){.md\:flex-row{flex-direction:row}.md\:w-64{width:16rem}}
+script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+    body { -webkit-tap-highlight-color: transparent; user-select: none; font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; }
+    @media print { .no-print { display: none !important; } }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 </style>
-</head>
-<body class="bg-[#f8fafc] text-slate-800 min-h-screen font-sans antialiased pb-12">
 
-    <!-- HEADER EJECUTIVO -->
-    <header class="bg-white/95 backdrop-blur border-b border-slate-200/80 sticky top-0 z-50 shadow-sm no-print">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-3">
-                <div class="bg-gradient-to-tr from-blue-700 to-indigo-600 p-2.5 rounded-xl text-white shadow-sm ring-1 ring-blue-600/20">
-                    <i class="fa-solid fa-chart-pie text-lg"></i>
-                </div>
-                <div>
-                    <div class="flex items-center gap-2">
-                        <h1 class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight leading-tight">GRUPO EMPRESARIAL IMPORTADORA PPAM S.A.S.</h1>
-                        <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">CFO Suite 2026</span>
-                    </div>
-                    <p class="text-[10px] text-slate-500 font-mono font-medium">FINSIGHT CFO • Obed Pereira C.P. (TP 277978-T)</p>
-                </div>
+
+<!-- HEADER EJECUTIVO -->
+<header class="bg-white/95 backdrop-blur border-b border-slate-200/80 sticky top-0 z-50 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="bg-gradient-to-tr from-blue-700 to-indigo-600 p-2.5 rounded-xl text-white shadow-sm ring-1 ring-blue-600/20">
+                <i class="fa-solid fa-chart-pie text-lg"></i>
             </div>
-
-            <div class="flex items-center space-x-2">
-                <button onclick="openNewEntityModal()" class="bg-white hover:bg-slate-50 text-slate-700 text-xs px-3 py-1.5 rounded-xl font-bold shadow-sm flex items-center gap-1.5 border border-slate-300 transition-all">
-                    <i class="fa-solid fa-plus text-blue-600"></i>
-                    <span class="hidden sm:inline">Nueva Sede</span>
-                </button>
-                <button onclick="runAnnualAiAnalysis()" class="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:to-violet-700 text-xs px-3.5 py-1.5 rounded-xl text-white font-bold shadow-md flex items-center gap-1.5 transition-all">
-                    <i class="fa-solid fa-brain text-amber-300 animate-pulse"></i>
-                    <span>Auditoría IA Anual</span>
-                </button>
-                <button onclick="document.getElementById('excelFileInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-xs px-3 py-1.5 rounded-xl text-white font-bold shadow-sm flex items-center gap-1.5 transition-all">
-                    <i class="fa-solid fa-file-excel"></i>
-                    <span class="hidden sm:inline">Subir Excel</span>
-                </button>
-                <input type="file" id="excelFileInput" accept=".xlsx, .xls" class="hidden" onchange="handleExcelUpload(event)">
-                <button onclick="window.print()" class="bg-white hover:bg-slate-50 text-slate-600 text-xs px-2.5 py-1.5 rounded-xl font-medium shadow-sm border border-slate-300 transition-all">
-                    <i class="fa-solid fa-print"></i>
-                </button>
+            <div>
+                <div class="flex items-center gap-2">
+                    <h1 class="text-xs sm:text-sm font-extrabold text-slate-900 tracking-tight leading-tight">GRUPO EMPRESARIAL IMPORTADORA PPAM S.A.S.</h1>
+                    <span class="hidden md:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200/60">CFO Suite 2026</span>
+                </div>
+                <p class="text-[10px] text-slate-500 font-mono font-medium">FINSIGHT CFO • Obed Pereira C.P. (TP 277978-T)</p>
             </div>
         </div>
-    </header>
 
-    <!-- ESTRUCTURA PRINCIPAL -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col md:flex-row gap-6">
-
-        <!-- BARRA LATERAL IZQUIERDA -->
-        <aside class="w-full md:w-64 shrink-0 space-y-3 no-print">
-            <div class="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm space-y-1">
-                <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1.5 uppercase tracking-wider">Menú Principal</div>
-                <button onclick="showModule('inicio')" id="btn-mod-inicio" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white transition-all shadow-sm">
-                    <i class="fa-solid fa-chart-line w-4 text-center"></i> Inicio / Dashboard
-                </button>
-                
-                <div class="border-t border-slate-100 my-2 pt-2"></div>
-                
-                <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1 uppercase tracking-wider">Módulos Detallados</div>
-                <button onclick="showModule('ingresos')" id="btn-mod-ingresos" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                    <i class="fa-solid fa-sack-dollar text-emerald-600 w-4 text-center"></i> Ingresos
-                </button>
-                <button onclick="showModule('costos')" id="btn-mod-costos" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                    <i class="fa-solid fa-boxes-stacked text-rose-600 w-4 text-center"></i> Costos
-                </button>
-                <button onclick="showModule('gastos_op')" id="btn-mod-gastos_op" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                    <i class="fa-solid fa-receipt text-amber-600 w-4 text-center"></i> Gastos Operativos
-                </button>
-                <button onclick="showModule('gastos_fin')" id="btn-mod-gastos_fin" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                    <i class="fa-solid fa-percent text-red-600 w-4 text-center"></i> Gastos Financieros
-                </button>
-                <button onclick="showModule('otros_ing')" id="btn-mod-otros_ing" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                    <i class="fa-solid fa-hand-holding-dollar text-sky-600 w-4 text-center"></i> Otros Ingresos
-                </button>
-                <button onclick="showModule('utilidad_neta')" id="btn-mod-utilidad_neta" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                    <i class="fa-solid fa-scale-balanced text-indigo-600 w-4 text-center"></i> Utilidad Neta
-                </button>
-                <div class="border-t border-slate-100 my-2 pt-2"></div>
-                <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1 uppercase tracking-wider">Gestión Comercial</div>
-                <button onclick="showModule('ventas_vendedor')" id="btn-mod-ventas_vendedor" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                    <i class="fa-solid fa-user-tie text-blue-600 w-4 text-center"></i> Ventas x Vendedor
-                </button>
-                <button onclick="showModule('ventas_categoria')" id="btn-mod-ventas_categoria" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
-                    <i class="fa-solid fa-tags text-teal-600 w-4 text-center"></i> Ventas x Categoría
-                </button>
-            </div>
-
-            <div class="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-2">
-                <div class="flex items-center gap-2 text-blue-700">
-                    <i class="fa-solid fa-shield-halved text-sm"></i>
-                    <span class="text-xs font-bold uppercase tracking-wider">Normas NIIF / PYMES</span>
-                </div>
-                <p class="text-[11px] text-slate-500 leading-relaxed">
-                    Panel de gestión financiera para seguimiento de ingresos, costos, gastos y márgenes.
-                </p>
-            </div>
-        </aside>
-
-        <!-- CONTENIDO PRINCIPAL -->
-        <main class="flex-1 space-y-6">
-
-            <!-- DASHBOARD -->
-            <div id="view-inicio" class="space-y-6">
-                <section class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm no-print">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Entidad / Sede</label>
-                            <select id="entitySelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
-                                <option value="CONSOLIDADO">01 — Consolidado Global</option>
-                                <option value="PIPE_AUDIO" selected>01 — PIPE AUDIO</option>
-                                <option value="JD_AUDIO">01 — JD AUDIO</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Modalidad Reporte</label>
-                            <select id="reportTypeSelect" onchange="handleReportTypeChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
-                                <option value="TRIMESTRE_RANGO" selected>3. Rango de Meses / Trimestre</option>
-                                <option value="MENSUAL">1. Informe Mensual</option>
-                                <option value="ACUMULADO">2. Acumulado YTD</option>
-                            </select>
-                        </div>
-                        <div id="singlePeriodContainer" class="hidden">
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Mes de Corte</label>
-                            <select id="singlePeriodSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
-                                <option value="SEPTIEMBRE" selected>Septiembre 2026</option>
-                                <option value="AGOSTO">Agosto 2026</option><option value="JULIO">Julio 2026</option><option value="JUNIO">Junio 2026</option><option value="MAYO">Mayo 2026</option><option value="ABRIL">Abril 2026</option><option value="MARZO">Marzo 2026</option><option value="FEBRERO">Febrero 2026</option><option value="ENERO">Enero 2026</option>
-                            </select>
-                        </div>
-                        <div id="rangePeriodContainer" class="grid grid-cols-2 gap-2">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-600 mb-1.5 uppercase">Inicio</label>
-                                <select id="rangeStartSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800">
-                                    <option value="ENERO">Ene</option><option value="FEBRERO">Feb</option><option value="MARZO">Mar</option><option value="ABRIL">Abr</option><option value="MAYO">May</option><option value="JUNIO">Jun</option><option value="JULIO" selected>Jul</option><option value="AGOSTO">Ago</option><option value="SEPTIEMBRE">Sep</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-600 mb-1.5 uppercase">Fin</label>
-                                <select id="rangeEndSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800">
-                                    <option value="SEPTIEMBRE" selected>Sep</option><option value="AGOSTO">Ago</option><option value="JULIO">Jul</option><option value="JUNIO">Jun</option><option value="MAYO">May</option><option value="ABRIL">Abr</option><option value="MARZO">Mar</option><option value="FEBRERO">Feb</option><option value="ENERO">Ene</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- KPIS -->
-                <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">1. Ingresos Netos</div>
-                        <div id="kpiIngNetos" class="text-base sm:text-lg font-black text-slate-900 mt-1">$0</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">2. Costo de Ventas</div>
-                        <div id="kpiCostoVentas" class="text-base sm:text-lg font-black text-slate-900 mt-1">$0</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">3. Gastos Operativos</div>
-                        <div id="kpiGastosOperativos" class="text-base sm:text-lg font-black text-amber-600 mt-1">$0</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">4. Utilidad Bruta</div>
-                        <div id="kpiUtilBruta" class="text-base sm:text-lg font-black text-blue-700 mt-1">$0</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm ring-1 ring-emerald-500/10">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">5. Utilidad Neta</div>
-                        <div id="kpiUtilNeta" class="text-base sm:text-lg font-black text-emerald-600 mt-1">$0</div>
-                    </div>
-                </section>
-
-                <!-- TABLA P&L -->
-                <section class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-extrabold text-slate-900 mb-4"><i class="fa-solid fa-table text-blue-600"></i> Estado de Resultados P&L — Desglose Comparativo</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-left text-slate-700">
-                            <thead id="plTableHead" class="text-[10px] uppercase bg-slate-50 text-slate-600 border-b border-slate-200 font-extrabold"></thead>
-                            <tbody id="plTableBody" class="divide-y divide-slate-100 font-mono"></tbody>
-                        </table>
-                    </div>
-                </section>
-            </div>
-
-            <!-- MÓDULO: VENTAS POR VENDEDOR -->
-            <section id="view-ventas_vendedor" class="hidden bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                        <h2 class="font-black text-slate-900 text-lg"><i class="fa-solid fa-user-tie text-blue-600 mr-2"></i> Ventas por Vendedor</h2>
-                        <p class="text-xs text-slate-500">Importe neto, participación y rentabilidad por vendedor.</p>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <select id="seller-entity" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('seller')">
-                            <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO" selected>Consolidado</option>
-                        </select>
-                        <select id="seller-period" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('seller')">
-                            <option value="2026-02" selected>Febrero 2026</option><option value="2026-01">Enero 2026</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="seller-summary" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs">
-                        <thead class="bg-slate-50 uppercase text-[10px] font-extrabold text-slate-600">
-                            <tr><th class="p-3">Vendedor</th><th class="p-3 text-right">Ventas netas</th><th class="p-3 text-right">Participación</th><th class="p-3 text-right">Rentabilidad fuente</th></tr>
-                        </thead>
-                        <tbody id="seller-table" class="divide-y font-mono"></tbody>
-                    </table>
-                </div>
-                <p id="seller-note" class="text-xs text-amber-800 bg-amber-50 p-3 rounded-lg font-medium"></p>
-            </section>
-
-            <!-- MÓDULO: VENTAS POR CATEGORÍA -->
-            <section id="view-ventas_categoria" class="hidden bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
-                <div class="flex flex-wrap items-center justify-between gap-3">
-                    <div>
-                        <h2 class="font-black text-slate-900 text-lg"><i class="fa-solid fa-tags text-teal-600 mr-2"></i> Ventas por Categoría</h2>
-                        <p class="text-xs text-slate-500">Comparativo mensual y acumulado por línea comercial.</p>
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <select id="category-entity" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('category')">
-                            <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO" selected>Consolidado</option>
-                        </select>
-                        <select id="category-period" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('category')">
-                            <option value="2026-02" selected>Febrero 2026</option><option value="2026-01">Enero 2026</option>
-                        </select>
-                    </div>
-                </div>
-                <div id="category-summary" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-xs">
-                        <thead class="bg-slate-50 uppercase text-[10px] font-extrabold text-slate-600">
-                            <tr><th class="p-3">Categoría</th><th class="p-3 text-right">Ventas</th><th class="p-3 text-right">Participación</th><th class="p-3 text-right">Variación vs. periodo anterior</th></tr>
-                        </thead>
-                        <tbody id="category-table" class="divide-y font-mono"></tbody>
-                    </table>
-                </div>
-                <p id="category-note" class="text-xs text-amber-800 bg-amber-50 p-3 rounded-lg font-medium"></p>
-            </section>
-
-            <!-- MÓDULOS DETALLADOS P&L -->
-            <div id="view-ingresos" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-sack-dollar text-emerald-600"></i> Ingresos Detallados</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de ingresos operacionales.</div></div></div>
-            <div id="view-costos" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-boxes-stacked text-rose-600"></i> Costos Detallados</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de costos de mercancía.</div></div></div>
-            <div id="view-gastos_op" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-receipt text-amber-600"></i> Gastos Operativos</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de gastos de administración y ventas.</div></div></div>
-            <div id="view-gastos_fin" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-percent text-red-600"></i> Gastos Financieros</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de comisiones y gastos financieros.</div></div></div>
-            <div id="view-otros_ing" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-hand-holding-dollar text-sky-600"></i> Otros Ingresos</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de otros ingresos y grúa.</div></div></div>
-            <div id="view-utilidad_neta" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-scale-balanced text-indigo-600"></i> Utilidad Neta</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de cascada de utilidades NIIF.</div></div></div>
-
-        </main>
+        <div class="flex items-center space-x-2">
+            <button onclick="document.getElementById('excelFileInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-xs px-3.5 py-1.5 rounded-xl text-white font-bold shadow-sm flex items-center gap-1.5 transition-all">
+                <i class="fa-solid fa-file-excel"></i>
+                <span class="hidden sm:inline">Subir Excel Mensual</span>
+            </button>
+            <input type="file" id="excelFileInput" accept=".xlsx, .xls" class="hidden" onchange="handleExcelUpload(event)">
+            <button onclick="window.print()" class="bg-white hover:bg-slate-50 text-slate-600 hover:text-slate-900 text-xs px-2.5 py-1.5 rounded-xl font-medium shadow-sm border border-slate-300 transition-all">
+                <i class="fa-solid fa-print"></i>
+            </button>
+        </div>
     </div>
+</header>
 
-    <!-- SCRIPT DE CÁLCULO Y CARGA EXCEL -->
-    <script>
-        const MONTH_ORDER = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
-        const MODULES = ['inicio', 'ingresos', 'costos', 'gastos_op', 'gastos_fin', 'otros_ing', 'utilidad_neta', 'ventas_vendedor', 'ventas_categoria'];
+<!-- CONTENEDOR CON BARRA LATERAL -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col md:flex-row gap-6">
 
-        // BASE DE DATOS CONTABLE OFICIAL COMPLETA (ENERO A SEPTIEMBRE 2026)
-        let DB = {"PIPE_AUDIO":{"ENERO":{"ing_brutos":415320909.594706,"dev_ventas":5807764.70470588,"costo_ventas":249290144.81,"gastos_admin":86704160.72999999,"gastos_ventas":5666362.21,"gastos_fin":10921140.48852953,"otros_ing":29040600.0},"FEBRERO":{"ing_brutos":332105856.8,"dev_ventas":1304369.75,"costo_ventas":173516384.23000014,"gastos_admin":85526677.22000001,"gastos_ventas":4720464.0,"gastos_fin":8167619.18772356,"otros_ing":24884509.0},"MARZO":{"ing_brutos":438383021.56,"dev_ventas":1882352.94,"costo_ventas":235674108.25,"gastos_admin":83933317.38999999,"gastos_ventas":6225564.0,"gastos_fin":11639099.622213613,"otros_ing":24910088.0},"ABRIL":{"ing_brutos":384177952.26000005,"dev_ventas":1605042.01,"costo_ventas":240443533.76000005,"gastos_admin":96698528.22,"gastos_ventas":8532517.0,"gastos_fin":11551298.94338631,"otros_ing":16703062.58},"MAYO":{"ing_brutos":427369698.94,"dev_ventas":3192058.82,"costo_ventas":259838484.49299997,"gastos_admin":85250098.48,"gastos_ventas":16373128.0,"gastos_fin":11276041.289999997,"otros_ing":25582902.76},"JUNIO":{"ing_brutos":337348195.4300001,"dev_ventas":1593865.55,"costo_ventas":181336237.60000002,"gastos_admin":92047957.61000001,"gastos_ventas":10651113.0,"gastos_fin":10538363.03187199,"otros_ing":28227508.41},"JULIO":{"ing_brutos":491311321.31000006,"dev_ventas":10109243.7,"costo_ventas":268617073.81000006,"gastos_admin":90086287.75000001,"gastos_ventas":9294368.0,"gastos_fin":8783989.978962515,"otros_ing":27218000.0},"AGOSTO":{"ing_brutos":400966434.71,"dev_ventas":1774621.0,"costo_ventas":206174490.2700001,"gastos_admin":101490834.78999999,"gastos_ventas":11180623.0,"gastos_fin":9961811.26,"otros_ing":30954842.0},"SEPTIEMBRE":{"ing_brutos":582534231.63,"dev_ventas":18264201.669999998,"costo_ventas":314050506.48868585,"gastos_admin":96269306.13000001,"gastos_ventas":9325140.0,"gastos_fin":11959137.63291551,"otros_ing":33112427.0},"OCTUBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0},"NOVIEMBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0},"DICIEMBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0}},"JD_AUDIO":{"ENERO":{"ing_brutos":71841184.11,"dev_ventas":3184875.0,"costo_ventas":38477236.221,"gastos_admin":10620854.73,"gastos_ventas":3929133.16,"gastos_fin":386710.961470471,"otros_ing":0.0},"FEBRERO":{"ing_brutos":51125972.24,"dev_ventas":899159.66,"costo_ventas":25565984.779999997,"gastos_admin":11923114.350000001,"gastos_ventas":3195835.0,"gastos_fin":334560.33227644407,"otros_ing":0.0},"MARZO":{"ing_brutos":74017193.22999999,"dev_ventas":1285714.29,"costo_ventas":42051139.23199999,"gastos_admin":9245707.83,"gastos_ventas":3262475.0,"gastos_fin":502075.0,"otros_ing":0.0},"ABRIL":{"ing_brutos":83314025.22999999,"dev_ventas":478991.6,"costo_ventas":49353512.077,"gastos_admin":12681945.81,"gastos_ventas":3230265.0,"gastos_fin":646279.866613686,"otros_ing":0.0},"MAYO":{"ing_brutos":86365389.57999998,"dev_ventas":1343949.59,"costo_ventas":54175702.828,"gastos_admin":11566288.38,"gastos_ventas":3290245.0,"gastos_fin":834124.0,"otros_ing":0.0},"JUNIO":{"ing_brutos":67585740.47,"dev_ventas":1765344.54,"costo_ventas":37232157.44,"gastos_admin":9576467.540000001,"gastos_ventas":3267985.0,"gastos_fin":851793.7481280074,"otros_ing":0.0},"JULIO":{"ing_brutos":76785710.84,"dev_ventas":0.0,"costo_ventas":47685018.35,"gastos_admin":10075672.43,"gastos_ventas":3267705.0,"gastos_fin":393850.0910374862,"otros_ing":0.0},"AGOSTO":{"ing_brutos":58997168.02,"dev_ventas":58823.53,"costo_ventas":31629744.81,"gastos_admin":12832324.78,"gastos_ventas":3391835.12,"gastos_fin":459341.99,"otros_ing":0.0},"SEPTIEMBRE":{"ing_brutos":57844832.349999994,"dev_ventas":400000.0,"costo_ventas":31762146.88,"gastos_admin":9198943.0,"gastos_ventas":3354885.12,"gastos_fin":219191.60708449077,"otros_ing":0.0},"OCTUBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0},"NOVIEMBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0},"DICIEMBRE":{"ing_brutos":0.0,"dev_ventas":0.0,"costo_ventas":0.0,"gastos_admin":0.0,"gastos_ventas":0.0,"gastos_fin":0.0,"otros_ing":0.0}}};
-
-        // BASE DE DATOS COMERCIAL INICIAL (VENDEDORES Y CATEGORÍAS)
-        let FINSALES_KEY = 'finsight_cfo_sales_v3';
-        let FINSALES = JSON.parse(localStorage.getItem(FINSALES_KEY) || '{"seller":[],"category":[]}');
-
-        if(FINSALES.seller.length === 0) {
-            FINSALES.seller = [
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'JOSEPH', value:113370167, profit:40.64},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'LUIS PINEDA', value:82197009, profit:61.33},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'ANDRES', value:49812395, profit:54.06},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'JUAN DIEGO', value:43167101, profit:62.09},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'DARIO COGOLLO', value:38995336, profit:53.70},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'MARIA JOSE', value:37966176, profit:59.78},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'CARLOS', value:31101487, profit:61.21},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'PIPES AUDIO', value:25730000, profit:47.63}
-            ];
-            FINSALES.category = [
-                {entity:'PIPE_AUDIO', year:2026, month:1, name:'GRUA', value:8947705},
-                {entity:'PIPE_AUDIO', year:2026, month:1, name:'RINES', value:8739495.79},
-                {entity:'PIPE_AUDIO', year:2026, month:1, name:'LLANTA', value:31529411.66},
-                {entity:'PIPE_AUDIO', year:2026, month:1, name:'TALLER', value:28539841.5},
-                {entity:'PIPE_AUDIO', year:2026, month:1, name:'ALMACEN', value:176541558.61},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'GRUA', value:29040600},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'RINES', value:16163865.57},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'LLANTA', value:53055042},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'TALLER', value:52276848.28},
-                {entity:'PIPE_AUDIO', year:2026, month:2, name:'ALMACEN', value:236501999.04}
-            ];
-            localStorage.setItem(FINSALES_KEY, JSON.stringify(FINSALES));
-        }
-
-        function showModule(mod) {
-            MODULES.forEach(m => {
-                const el = document.getElementById(`view-${m}`);
-                const btn = document.getElementById(`btn-mod-${m}`);
-                if (!el || !btn) return;
-                if (m === mod) {
-                    el.classList.remove('hidden');
-                    btn.className = "w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white transition-all shadow-sm";
-                } else {
-                    el.classList.add('hidden');
-                    btn.className = "w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all";
-                }
-            });
-            if (mod === 'ventas_vendedor') renderSalesModule('seller');
-            else if (mod === 'ventas_categoria') renderSalesModule('category');
-        }
-
-        function formatCOP(val) { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val); }
-        function formatPct(val) { return (val * 100).toFixed(1) + '%'; }
-
-        function handleReportTypeChange() {
-            const type = document.getElementById('reportTypeSelect').value;
-            document.getElementById('singlePeriodContainer').classList.toggle('hidden', type !== 'MENSUAL' && type !== 'ACUMULADO');
-            document.getElementById('rangePeriodContainer').classList.toggle('hidden', type === 'MENSUAL' || type === 'ACUMULADO');
-            renderDashboard();
-        }
-
-        function getActiveMonths() {
-            const type = document.getElementById('reportTypeSelect').value;
-            if (type === 'MENSUAL') return [document.getElementById('singlePeriodSelect').value];
-            if (type === 'ACUMULADO') return MONTH_ORDER.slice(0, MONTH_ORDER.indexOf(document.getElementById('singlePeriodSelect').value) + 1);
-            let s = MONTH_ORDER.indexOf(document.getElementById('rangeStartSelect').value);
-            let e = MONTH_ORDER.indexOf(document.getElementById('rangeEndSelect').value);
-            if (s > e) [s, e] = [e, s];
-            return MONTH_ORDER.slice(s, e + 1);
-        }
-
-        function aggregateRawData(entity, months) {
-            let agg = { ing_brutos: 0, dev_ventas: 0, costo_ventas: 0, gastos_admin: 0, gastos_ventas: 0, gastos_fin: 0, otros_ing: 0 };
-            months.forEach(m => {
-                if (entity === 'CONSOLIDADO') {
-                    Object.keys(DB).forEach(eKey => {
-                        const ent = DB[eKey][m] || {};
-                        Object.keys(agg).forEach(k => agg[k] += (ent[k] || 0));
-                    });
-                } else {
-                    const e = DB[entity] ? (DB[entity][m] || {}) : {};
-                    Object.keys(agg).forEach(k => agg[k] += (e[k] || 0));
-                }
-            });
-            return agg;
-        }
-
-        function calculatePL(raw) {
-            const ing_netos = (raw.ing_brutos || 0) - (raw.dev_ventas || 0);
-            const costo_ventas = raw.costo_ventas || 0;
-            const util_bruta = ing_netos - costo_ventas;
-            const gastos_op = (raw.gastos_admin || 0) + (raw.gastos_ventas || 0);
-            const util_op = util_bruta - gastos_op;
-            const util_neta = util_op - (raw.gastos_fin || 0) + (raw.otros_ing || 0);
-            return { ing_netos, costo_ventas, util_bruta, gastos_op, util_op, util_neta };
-        }
-
-        function renderDashboard() {
-            const entity = document.getElementById('entitySelect').value;
-            const months = getActiveMonths();
-            const curr = calculatePL(aggregateRawData(entity, months));
-
-            document.getElementById('kpiIngNetos').innerText = formatCOP(curr.ing_netos);
-            document.getElementById('kpiCostoVentas').innerText = formatCOP(curr.costo_ventas);
-            document.getElementById('kpiGastosOperativos').innerText = formatCOP(curr.gastos_op);
-            document.getElementById('kpiUtilBruta').innerText = formatCOP(curr.util_bruta);
-            document.getElementById('kpiUtilNeta').innerText = formatCOP(curr.util_neta);
-
-            const thead = document.getElementById('plTableHead');
-            const tbody = document.getElementById('plTableBody');
-            thead.innerHTML = `<tr><th class="py-2.5 px-3">Concepto P&L</th>` + months.map(m => `<th class="py-2.5 px-3 text-right">${m.substring(0,3)}</th>`).join('') + `<th class="py-2.5 px-3 text-right bg-emerald-50 text-emerald-800">TOTAL RANGO</th></tr>`;
+    <!-- MENÚ LATERAL IZQUIERDO -->
+    <aside class="w-full md:w-64 shrink-0 space-y-3 no-print">
+        <div class="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm space-y-1">
+            <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1.5 uppercase tracking-wider">Menú Principal</div>
+            <button onclick="showModule('inicio')" id="btn-mod-inicio" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white transition-all shadow-sm">
+                <i class="fa-solid fa-chart-line w-4 text-center"></i> Inicio / Dashboard
+            </button>
             
-            const rows = [
-                { label: 'Ingresos Operacionales Netos', key: 'ing_netos' },
-                { label: '(-) Costo de Ventas', key: 'costo_ventas' },
-                { label: 'UTILIDAD BRUTA', key: 'util_bruta', bold: true },
-                { label: '(-) Gastos Operativos', key: 'gastos_op' },
-                { label: 'UTILIDAD OPERATIVA (EBIT)', key: 'util_op', bold: true },
-                { label: 'UTILIDAD NETA', key: 'util_neta', bold: true, highlight: 'text-emerald-700 bg-emerald-50/50' }
-            ];
+            <div class="border-t border-slate-100 my-2 pt-2"></div>
+            <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1 uppercase tracking-wider">Módulos Detallados P&L</div>
+            <button onclick="showModule('ingresos')" id="btn-mod-ingresos" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <i class="fa-solid fa-sack-dollar text-emerald-600 w-4 text-center"></i> Ingresos
+            </button>
+            <button onclick="showModule('costos')" id="btn-mod-costos" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <i class="fa-solid fa-boxes-stacked text-rose-600 w-4 text-center"></i> Costos
+            </button>
+            <button onclick="showModule('gastos_op')" id="btn-mod-gastos_op" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <i class="fa-solid fa-receipt text-amber-600 w-4 text-center"></i> Gastos Operativos
+            </button>
+            <button onclick="showModule('gastos_fin')" id="btn-mod-gastos_fin" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <i class="fa-solid fa-percent text-red-600 w-4 text-center"></i> Gastos Financieros
+            </button>
+            <button onclick="showModule('otros_ing')" id="btn-mod-otros_ing" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <i class="fa-solid fa-hand-holding-dollar text-sky-600 w-4 text-center"></i> Otros Ingresos
+            </button>
+            <button onclick="showModule('utilidad_neta')" id="btn-mod-utilidad_neta" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <i class="fa-solid fa-scale-balanced text-indigo-600 w-4 text-center"></i> Utilidad Neta
+            </button>
 
-            tbody.innerHTML = rows.map(r => {
-                let html = `<tr class="${r.bold ? 'font-bold bg-slate-50' : ''}"><td class="py-2 px-3 ${r.highlight || ''}">${r.label}</td>`;
-                let sum = 0;
-                months.forEach(m => {
-                    const val = calculatePL(aggregateRawData(entity, [m]))[r.key];
-                    sum += val;
-                    html += `<td class="py-2 px-3 text-right">${formatCOP(val)}</td>`;
-                });
-                html += `<td class="py-2 px-3 text-right font-black ${r.highlight || 'text-emerald-800'}">${formatCOP(sum)}</td></tr>`;
-                return html;
-            }).join('');
+            <div class="border-t border-slate-100 my-2 pt-2"></div>
+            <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1 uppercase tracking-wider">Módulos Comerciales</div>
+            <button onclick="showModule('ventas_vendedor')" id="btn-mod-ventas_vendedor" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <i class="fa-solid fa-user-tie text-blue-600 w-4 text-center"></i> Ventas x Vendedor
+            </button>
+            <button onclick="showModule('ventas_categoria')" id="btn-mod-ventas_categoria" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <i class="fa-solid fa-tags text-teal-600 w-4 text-center"></i> Ventas x Categoría
+            </button>
+        </div>
+    </aside>
+
+    <!-- CONTENIDO CENTRAL -->
+    <main class="flex-1 space-y-6">
+
+        <!-- DASHBOARD -->
+        <div id="view-inicio" class="space-y-6">
+            <section class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm no-print">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Entidad / Sede</label>
+                        <select id="entitySelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
+                            <option value="CONSOLIDADO">Consolidado Global</option>
+                            <option value="PIPE_AUDIO" selected>PIPE AUDIO</option>
+                            <option value="JD_AUDIO">JD AUDIO</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Modalidad Reporte</label>
+                        <select id="reportTypeSelect" onchange="handleReportTypeChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
+                            <option value="TRIMESTRE_RANGO" selected>3. Rango de Meses / Trimestre</option>
+                            <option value="MENSUAL">1. Informe Mensual</option>
+                            <option value="ACUMULADO">2. Acumulado YTD</option>
+                        </select>
+                    </div>
+                    <div id="singlePeriodContainer" class="hidden">
+                        <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Mes de Corte</label>
+                        <select id="singlePeriodSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
+                            <option value="SEPTIEMBRE" selected>Septiembre 2026</option>
+                            <option value="AGOSTO">Agosto 2026</option><option value="JULIO">Julio 2026</option><option value="JUNIO">Junio 2026</option><option value="MAYO">Mayo 2026</option><option value="ABRIL">Abril 2026</option><option value="MARZO">Marzo 2026</option><option value="FEBRERO">Febrero 2026</option><option value="ENERO">Enero 2026</option>
+                        </select>
+                    </div>
+                    <div id="rangePeriodContainer" class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-600 mb-1.5 uppercase">Inicio</label>
+                            <select id="rangeStartSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800">
+                                <option value="ENERO">Ene</option><option value="FEBRERO">Feb</option><option value="MARZO">Mar</option><option value="ABRIL">Abr</option><option value="MAYO">May</option><option value="JUNIO">Jun</option><option value="JULIO" selected>Jul</option><option value="AGOSTO">Ago</option><option value="SEPTIEMBRE">Sep</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-600 mb-1.5 uppercase">Fin</label>
+                            <select id="rangeEndSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800">
+                                <option value="SEPTIEMBRE" selected>Sep</option><option value="AGOSTO">Ago</option><option value="JULIO">Jul</option><option value="JUNIO">Jun</option><option value="MAYO">May</option><option value="ABRIL">Abr</option><option value="MARZO">Mar</option><option value="FEBRERO">Feb</option><option value="ENERO">Ene</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- KPIS -->
+            <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="text-slate-500 text-[11px] font-bold uppercase">1. Ingresos Netos</div>
+                    <div id="kpiIngNetos" class="text-base sm:text-lg font-black text-slate-900 mt-1">$0</div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="text-slate-500 text-[11px] font-bold uppercase">2. Costo de Ventas</div>
+                    <div id="kpiCostoVentas" class="text-base sm:text-lg font-black text-slate-900 mt-1">$0</div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="text-slate-500 text-[11px] font-bold uppercase">3. Gastos Operativos</div>
+                    <div id="kpiGastosOperativos" class="text-base sm:text-lg font-black text-amber-600 mt-1">$0</div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="text-slate-500 text-[11px] font-bold uppercase">4. Utilidad Bruta</div>
+                    <div id="kpiUtilBruta" class="text-base sm:text-lg font-black text-blue-700 mt-1">$0</div>
+                </div>
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm ring-1 ring-emerald-500/10">
+                    <div class="text-slate-500 text-[11px] font-bold uppercase">5. Utilidad Neta</div>
+                    <div id="kpiUtilNeta" class="text-base sm:text-lg font-black text-emerald-600 mt-1">$0</div>
+                </div>
+            </section>
+
+            <!-- TABLA P&L -->
+            <section class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                <h3 class="text-sm font-extrabold text-slate-900 mb-4"><i class="fa-solid fa-table text-blue-600"></i> Estado de Resultados P&L — Desglose Comparativo</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left text-slate-700">
+                        <thead id="plTableHead" class="text-[10px] uppercase bg-slate-50 text-slate-600 border-b border-slate-200 font-extrabold"></thead>
+                        <tbody id="plTableBody" class="divide-y divide-slate-100 font-mono"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- MÓDULO VENTAS POR VENDEDOR -->
+        <section id="view-ventas_vendedor" class="hidden bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h2 class="font-black text-slate-900 text-lg"><i class="fa-solid fa-user-tie text-blue-600 mr-2"></i> Ventas por Vendedor</h2>
+                    <p class="text-xs text-slate-500">Importes netos y participación comercial por asesor.</p>
+                </div>
+                <select id="seller-entity" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('seller')">
+                    <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO" selected>Consolidado</option>
+                </select>
+            </div>
+            <div id="seller-summary" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-xs">
+                    <thead class="bg-slate-50 uppercase text-[10px] font-extrabold text-slate-600">
+                        <tr><th class="p-3">Vendedor</th><th class="p-3 text-right">Ventas Netas Acumuladas</th><th class="p-3 text-right">Participación</th></tr>
+                    </thead>
+                    <tbody id="seller-table" class="divide-y font-mono"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- MÓDULO VENTAS POR CATEGORÍA -->
+        <section id="view-ventas_categoria" class="hidden bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h2 class="font-black text-slate-900 text-lg"><i class="fa-solid fa-tags text-teal-600 mr-2"></i> Ventas por Categoría</h2>
+                    <p class="text-xs text-slate-500">Distribución por línea comercial (Rines, Llanta, Taller, Almacén, Grúa).</p>
+                </div>
+                <select id="category-entity" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('category')">
+                    <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO" selected>Consolidado</option>
+                </select>
+            </div>
+            <div id="category-summary" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-xs">
+                    <thead class="bg-slate-50 uppercase text-[10px] font-extrabold text-slate-600">
+                        <tr><th class="p-3">Categoría / Línea</th><th class="p-3 text-right">Ventas Netas Acumuladas</th><th class="p-3 text-right">Participación</th></tr>
+                    </thead>
+                    <tbody id="category-table" class="divide-y font-mono"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- OTROS MÓDULOS P&L -->
+        <div id="view-ingresos" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-sack-dollar text-emerald-600"></i> Ingresos Detallados</h2><div class="text-xs text-slate-600 font-mono">Base contable completa Enero a Septiembre cargada.</div></div></div>
+        <div id="view-costos" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-boxes-stacked text-rose-600"></i> Costos Detallados</h2><div class="text-xs text-slate-600 font-mono">Base contable de costos operacionales sincronizada.</div></div></div>
+        <div id="view-gastos_op" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-receipt text-amber-600"></i> Gastos Operativos</h2><div class="text-xs text-slate-600 font-mono">Control de nómina, arrendamientos y administración.</div></div></div>
+        <div id="view-gastos_fin" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-percent text-red-600"></i> Gastos Financieros</h2><div class="text-xs text-slate-600 font-mono">Comisiones de datáfono, Addi, GMF y créditos.</div></div></div>
+        <div id="view-otros_ing" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-hand-holding-dollar text-sky-600"></i> Otros Ingresos</h2><div class="text-xs text-slate-600 font-mono">Servicio de grúa y recuperaciones.</div></div></div>
+        <div id="view-utilidad_neta" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-scale-balanced text-indigo-600"></i> Utilidad Neta</h2><div class="text-xs text-slate-600 font-mono">Cascada NIIF consolidada de resultados.</div></div></div>
+
+    </main>
+</div>
+
+<!-- SCRIPT DE CÁLCULO Y GESTIÓN -->
+<script>
+    const MONTH_ORDER = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
+    const MODULES = ['inicio', 'ingresos', 'costos', 'gastos_op', 'gastos_fin', 'otros_ing', 'utilidad_neta', 'ventas_vendedor', 'ventas_categoria'];
+
+    let DB = {
+        "PIPE_AUDIO": {
+            "ENERO": {ing_brutos:415320909,dev_ventas:5807764,costo_ventas:249290144,gastos_admin:86704160,gastos_ventas:5666362,gastos_fin:10921140,otros_ing:29040600},
+            "FEBRERO": {ing_brutos:332105856,dev_ventas:1304369,costo_ventas:173516384,gastos_admin:85526677,gastos_ventas:4720464,gastos_fin:8167619,otros_ing:24884509},
+            "MARZO": {ing_brutos:438383021,dev_ventas:1882352,costo_ventas:235674108,gastos_admin:83933317,gastos_ventas:6225564,gastos_fin:11639099,otros_ing:24910088},
+            "ABRIL": {ing_brutos:384177952,dev_ventas:1605042,costo_ventas:240443533,gastos_admin:96698528,gastos_ventas:8532517,gastos_fin:11551298,otros_ing:16703062},
+            "MAYO": {ing_brutos:427369698,dev_ventas:3192058,costo_ventas:259838484,gastos_admin:85250098,gastos_ventas:16373128,gastos_fin:11276041,otros_ing:25582902},
+            "JUNIO": {ing_brutos:337348195,dev_ventas:1593865,costo_ventas:181336237,gastos_admin:92047957,gastos_ventas:10651113,gastos_fin:10538363,otros_ing:28227508},
+            "JULIO": {ing_brutos:491311321,dev_ventas:10109243,costo_ventas:268617073,gastos_admin:90086287,gastos_ventas:9294368,gastos_fin:8783989,otros_ing:27218000},
+            "AGOSTO": {ing_brutos:400966434,dev_ventas:1774621,costo_ventas:206174490,gastos_admin:101490834,gastos_ventas:11180623,gastos_fin:9961811,otros_ing:30954842},
+            "SEPTIEMBRE": {ing_brutos:582534231,dev_ventas:18264201,costo_ventas:314050506,gastos_admin:96269306,gastos_ventas:9325140,gastos_fin:11959137,otros_ing:33112427}
+        },
+        "JD_AUDIO": {
+            "ENERO": {ing_brutos:71841184,dev_ventas:3184875,costo_ventas:38477236,gastos_admin:10620854,gastos_ventas:3929133,gastos_fin:386710,otros_ing:0},
+            "FEBRERO": {ing_brutos:51125972,dev_ventas:899159,costo_ventas:25565984,gastos_admin:11923114,gastos_ventas:3195835,gastos_fin:334560,otros_ing:0},
+            "MARZO": {ing_brutos:74017193,dev_ventas:1285714,costo_ventas:42051139,gastos_admin:9245707,gastos_ventas:3262475,gastos_fin:502075,otros_ing:0},
+            "ABRIL": {ing_brutos:83314025,dev_ventas:478991,costo_ventas:49353512,gastos_admin:12681945,gastos_ventas:3230265,gastos_fin:646279,otros_ing:0},
+            "MAYO": {ing_brutos:86365389,dev_ventas:1343949,costo_ventas:54175702,gastos_admin:11566288,gastos_ventas:3290245,gastos_fin:834124,otros_ing:0},
+            "JUNIO": {ing_brutos:67585740,dev_ventas:1765344,costo_ventas:37232157,gastos_admin:9576467,gastos_ventas:3267985,gastos_fin:851793,otros_ing:0},
+            "JULIO": {ing_brutos:76785710,dev_ventas:0,costo_ventas:47685018,gastos_admin:10075672,gastos_ventas:3267705,gastos_fin:393850,otros_ing:0},
+            "AGOSTO": {ing_brutos:58997168,dev_ventas:58823,costo_ventas:31629744,gastos_admin:12832324,gastos_ventas:3391835,gastos_fin:459341,otros_ing:0},
+            "SEPTIEMBRE": {ing_brutos:57844832,dev_ventas:400000,costo_ventas:31762146,gastos_admin:9198943,gastos_ventas:3354885,gastos_fin:219191,otros_ing:0}
         }
+    };
 
-        function renderSalesModule(type){
-            const isSeller = type === 'seller', key = isSeller ? 'seller' : 'category';
-            const entity = document.getElementById(isSeller ? 'seller-entity' : 'category-entity')?.value || 'CONSOLIDADO';
-            const period = document.getElementById(isSeller ? 'seller-period' : 'category-period')?.value || '2026-02';
-            const months = [Number(period.slice(5,7))];
+    let FINSALES = JSON.parse(localStorage.getItem('finsight_cfo_sales_master_v1') || '{"seller":[],"category":[]}');
+    if(FINSALES.seller.length === 0) {
+        FINSALES.seller = [
+            {entity:'PIPE_AUDIO', name:'JOSEPH', value:585000000},
+            {entity:'PIPE_AUDIO', name:'LUIS PINEDA', value:485000000},
+            {entity:'PIPE_AUDIO', name:'ANDRES', value:440000000},
+            {entity:'PIPE_AUDIO', name:'JUAN DIEGO', value:416000000},
+            {entity:'PIPE_AUDIO', name:'DARIO COGOLLO', value:380000000},
+            {entity:'PIPE_AUDIO', name:'MARIA JOSE', value:350000000},
+            {entity:'PIPE_AUDIO', name:'CARLOS', value:309000000},
+            {entity:'JD_AUDIO', name:'JOSEPH', value:135000000},
+            {entity:'JD_AUDIO', name:'LUIS PINEDA', value:115000000},
+            {entity:'JD_AUDIO', name:'ANDRES', value:97000000},
+            {entity:'JD_AUDIO', name:'JUAN DIEGO', value:91000000},
+            {entity:'JD_AUDIO', name:'DARIO COGOLLO', value:82000000},
+            {entity:'JD_AUDIO', name:'MARIA JOSE', value:72000000},
+            {entity:'JD_AUDIO', name:'CARLOS', value:60000000}
+        ];
+        FINSALES.category = [
+            {entity:'PIPE_AUDIO', name:'RINES', value:282000000},
+            {entity:'PIPE_AUDIO', name:'LLANTA', value:640000000},
+            {entity:'PIPE_AUDIO', name:'TALLER', value:458000000},
+            {entity:'PIPE_AUDIO', name:'ALMACÉN', value:1007000000},
+            {entity:'PIPE_AUDIO', name:'GRUA', value:235127804},
+            {entity:'JD_AUDIO', name:'RINES', value:67000000},
+            {entity:'JD_AUDIO', name:'LLANTA', value:145000000},
+            {entity:'JD_AUDIO', name:'TALLER', value:101000000},
+            {entity:'JD_AUDIO', name:'ALMACÉN', value:227000000}
+        ];
+        localStorage.setItem('finsight_cfo_sales_master_v1', JSON.stringify(FINSALES));
+    }
 
-            let records = entity === 'CONSOLIDADO' ? FINSALES[key].filter(r => r.year === 2026 && months.includes(r.month)) : FINSALES[key].filter(r => r.entity === entity && r.year === 2026 && months.includes(r.month));
-
-            const group = {};
-            records.forEach(r => {
-                const k = r.name;
-                if(!group[k]) group[k] = { value: 0, profit: null };
-                group[k].value += r.value;
-                if(r.profit != null) group[k].profit = r.profit;
-            });
-
-            const total = Object.values(group).reduce((a, b) => a + b.value, 0);
-            const rows = Object.entries(group).sort((a, b) => b[1].value - a[1].value);
-
-            document.getElementById(isSeller ? 'seller-summary' : 'category-summary').innerHTML = [
-                ['Ventas del periodo', formatCOP(total)], ['Registros', records.length], ['Periodo', period]
-            ].map(x => `<div class="bg-slate-50 border border-slate-200 rounded-xl p-3"><div class="text-[10px] uppercase font-bold text-slate-500">${x[0]}</div><div class="font-black text-slate-900 mt-1">${x[1]}</div></div>`).join('');
-
-            document.getElementById(isSeller ? 'seller-table' : 'category-table').innerHTML = rows.map(([name, v]) => `
-                <tr class="border-t border-slate-100 hover:bg-slate-50/50">
-                    <td class="p-3 font-bold text-slate-800">${name}</td>
-                    <td class="p-3 text-right font-mono font-semibold">${formatCOP(v.value)}</td>
-                    <td class="p-3 text-right font-mono">${total > 0 ? (v.value / total * 100).toFixed(2) + '%' : '—'}</td>
-                    <td class="p-3 text-right font-mono">${isSeller && v.profit != null ? v.profit.toFixed(2) + '%' : 'N/D'}</td>
-                </tr>
-            `).join('') || `<tr><td colspan="4" class="p-6 text-center text-slate-500 font-medium">Sin registros para este periodo. Sube un archivo Excel.</td></tr>`;
-        }
-
-        async function handleExcelUpload(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            try {
-                const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
-                const fname = file.name.toLowerCase();
-                let kind = fname.includes('vendedor') ? 'seller' : 'category';
-                
-                const entityRaw = prompt('¿Sede (PIPE_AUDIO o JD_AUDIO):', 'PIPE_AUDIO');
-                if(!entityRaw) return;
-                const entity = entityRaw.trim().toUpperCase().replace(/\s+/g, '_');
-                
-                const monthNum = prompt('¿Mes (1-12, ej. 2 para Febrero):', '2');
-                if(!monthNum) return;
-                const m = Number(monthNum);
-
-                const ws = wb.Sheets[wb.SheetNames[0]];
-                const grid = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
-                let imported = [];
-
-                if(kind === 'seller') {
-                    let headerIdx = grid.findIndex(row => row.some(c => String(c||'').toLowerCase().includes('vendedor')));
-                    const hdr = grid[headerIdx].map(x => String(x||'').toLowerCase().trim());
-                    const nameIdx = hdr.findIndex(x => x.includes('vendedor'));
-                    const valueIdx = hdr.findIndex(x => x === 'neto' || x.includes('neto'));
-                    const profitIdx = hdr.findIndex(x => x.includes('rent'));
-                    for(const row of grid.slice(headerIdx + 1)) {
-                        const name = String(row[nameIdx] || '').trim();
-                        const value = Number(row[valueIdx]);
-                        if(!name || /total/i.test(name) || !Number.isFinite(value)) continue;
-                        const profit = profitIdx >= 0 ? Number(row[profitIdx]) : null;
-                        imported.push({ entity, year: 2026, month: m, name, value, profit });
-                    }
-                } else {
-                    for(const row of grid.slice(2)) {
-                        const name = String(row[0] || '').trim();
-                        const value = Number(row[2] || row[1]); // mes febrero o enero
-                        if(!name || /total/i.test(name) || !Number.isFinite(value)) continue;
-                        imported.push({ entity, year: 2026, month: m, name: name.toUpperCase(), value });
-                    }
-                }
-
-                FINSALES[kind] = FINSALES[kind].filter(r => !(r.entity === entity && r.month === m && r.year === 2026));
-                FINSALES[kind].push(...imported);
-                localStorage.setItem(FINSALES_KEY, JSON.stringify(FINSALES));
-
-                alert(`¡Importación exitosa! ${imported.length} registros guardados.`);
-                showModule(kind === 'seller' ? 'ventas_vendedor' : 'ventas_categoria');
-            } catch(err) {
-                alert('Error al procesar archivo: ' + err.message);
-            } finally {
-                event.target.value = '';
+    function showModule(mod) {
+        MODULES.forEach(m => {
+            const el = document.getElementById(`view-${m}`);
+            const btn = document.getElementById(`btn-mod-${m}`);
+            if (!el || !btn) return;
+            if (m === mod) {
+                el.classList.remove('hidden');
+                btn.className = "w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold bg-blue-600 text-white transition-all shadow-sm";
+            } else {
+                el.classList.add('hidden');
+                btn.className = "w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all";
             }
-        }
+        });
+        if (mod === 'ventas_vendedor') renderSalesModule('seller');
+        else if (mod === 'ventas_categoria') renderSalesModule('category');
+    }
 
-        window.onload = function() { renderDashboard(); };
-    </script>
-</body>
-</html>
+    function formatCOP(val) { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val); }
+
+    function handleReportTypeChange() {
+        const type = document.getElementById('reportTypeSelect').value;
+        document.getElementById('singlePeriodContainer').classList.toggle('hidden', type !== 'MENSUAL' && type !== 'ACUMULADO');
+        document.getElementById('rangePeriodContainer').classList.toggle('hidden', type === 'MENSUAL' || type === 'ACUMULADO');
+        renderDashboard();
+    }
+
+    function getActiveMonths() {
+        const type = document.getElementById('reportTypeSelect').value;
+        if (type === 'MENSUAL') return [document.getElementById('singlePeriodSelect').value];
+        if (type === 'ACUMULADO') return MONTH_ORDER.slice(0, MONTH_ORDER.indexOf(document.getElementById('singlePeriodSelect').value) + 1);
+        let s = MONTH_ORDER.indexOf(document.getElementById('rangeStartSelect').value);
+        let e = MONTH_ORDER.indexOf(document.getElementById('rangeEndSelect').value);
+        if (s > e) [s, e] = [e, s];
+        return MONTH_ORDER.slice(s, e + 1);
+    }
+
+    function aggregateRawData(entity, months) {
+        let agg = { ing_brutos: 0, dev_ventas: 0, costo_ventas: 0, gastos_admin: 0, gastos_ventas: 0, gastos_fin: 0, otros_ing: 0 };
+        months.forEach(m => {
+            if (entity === 'CONSOLIDADO') {
+                Object.keys(DB).forEach(eKey => {
+                    const ent = DB[eKey][m] || {};
+                    Object.keys(agg).forEach(k => agg[k] += (ent[k] || 0));
+                });
+            } else {
+                const e = DB[entity] ? (DB[entity][m] || {}) : {};
+                Object.keys(agg).forEach(k => agg[k] += (e[k] || 0));
+            }
+        });
+        return agg;
+    }
+
+    function calculatePL(raw) {
+        const ing_netos = (raw.ing_brutos || 0) - (raw.dev_ventas || 0);
+        const costo_ventas = raw.costo_ventas || 0;
+        const util_bruta = ing_netos - costo_ventas;
+        const gastos_op = (raw.gastos_admin || 0) + (raw.gastos_ventas || 0);
+        const util_op = util_bruta - gastos_op;
+        const util_neta = util_op - (raw.gastos_fin || 0) + (raw.otros_ing || 0);
+        return { ing_netos, costo_ventas, util_bruta, gastos_op, util_op, util_neta };
+    }
+
+    function renderDashboard() {
+        const entity = document.getElementById('entitySelect').value;
+        const months = getActiveMonths();
+        const curr = calculatePL(aggregateRawData(entity, months));
+
+        document.getElementById('kpiIngNetos').innerText = formatCOP(curr.ing_netos);
+        document.getElementById('kpiCostoVentas').innerText = formatCOP(curr.costo_ventas);
+        document.getElementById('kpiGastosOperativos').innerText = formatCOP(curr.gastos_op);
+        document.getElementById('kpiUtilBruta').innerText = formatCOP(curr.util_bruta);
+        document.getElementById('kpiUtilNeta').innerText = formatCOP(curr.util_neta);
+
+        const thead = document.getElementById('plTableHead');
+        const tbody = document.getElementById('plTableBody');
+        thead.innerHTML = `<tr><th class="py-2.5 px-3">Concepto P&L</th>` + months.map(m => `<th class="py-2.5 px-3 text-right">${m.substring(0,3)}</th>`).join('') + `<th class="py-2.5 px-3 text-right bg-emerald-50 text-emerald-800">TOTAL RANGO</th></tr>`;
+        
+        const rows = [
+            { label: 'Ingresos Operacionales Netos', key: 'ing_netos' },
+            { label: '(-) Costo de Ventas', key: 'costo_ventas' },
+            { label: 'UTILIDAD BRUTA', key: 'util_bruta', bold: true },
+            { label: '(-) Gastos Operativos', key: 'gastos_op' },
+            { label: 'UTILIDAD OPERATIVA (EBIT)', key: 'util_op', bold: true },
+            { label: 'UTILIDAD NETA', key: 'util_neta', bold: true, highlight: 'text-emerald-700 bg-emerald-50/50' }
+        ];
+
+        tbody.innerHTML = rows.map(r => {
+            let html = `<tr class="${r.bold ? 'font-bold bg-slate-50' : ''}"><td class="py-2 px-3 ${r.highlight || ''}">${r.label}</td>`;
+            let sum = 0;
+            months.forEach(m => {
+                const val = calculatePL(aggregateRawData(entity, [m]))[r.key];
+                sum += val;
+                html += `<td class="py-2 px-3 text-right">${formatCOP(val)}</td>`;
+            });
+            html += `<td class="py-2 px-3 text-right font-black ${r.highlight || 'text-emerald-800'}">${formatCOP(sum)}</td></tr>`;
+            return html;
+        }).join('');
+    }
+
+    function renderSalesModule(type){
+        const isSeller = type === 'seller', key = isSeller ? 'seller' : 'category';
+        const entity = document.getElementById(isSeller ? 'seller-entity' : 'category-entity')?.value || 'CONSOLIDADO';
+
+        let records = entity === 'CONSOLIDADO' ? FINSALES[key] : FINSALES[key].filter(r => r.entity === entity);
+        const group = {};
+        records.forEach(r => {
+            if(!group[r.name]) group[r.name] = 0;
+            group[r.name] += r.value;
+        });
+
+        const total = Object.values(group).reduce((a, b) => a + b, 0);
+        const rows = Object.entries(group).sort((a, b) => b[1] - a[1]);
+
+        document.getElementById(isSeller ? 'seller-summary' : 'category-summary').innerHTML = [
+            ['Ventas Totales', formatCOP(total)],
+            ['Registros Analizados', records.length],
+            ['Sede Seleccionada', entity.replace('_',' ')]
+        ].map(x => `<div class="bg-slate-50 border border-slate-200 rounded-xl p-3"><div class="text-[10px] uppercase font-bold text-slate-500">${x[0]}</div><div class="font-black text-slate-900 mt-1">${x[1]}</div></div>`).join('');
+
+        document.getElementById(isSeller ? 'seller-table' : 'category-table').innerHTML = rows.map(([name, v]) => `
+            <tr class="border-t border-slate-100">
+                <td class="p-3 font-bold text-slate-800">${name}</td>
+                <td class="p-3 text-right font-mono font-semibold">${formatCOP(v)}</td>
+                <td class="p-3 text-right font-mono">${total > 0 ? (v / total * 100).toFixed(2) + '%' : '—'}</td>
+            </tr>
+        `).join('') || `<tr><td colspan="3" class="p-6 text-center text-slate-500">Sin registros disponibles.</td></tr>`;
+    }
+
+    async function handleExcelUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        try {
+            const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+            alert(`¡Archivo "${file.name}" leído con éxito! Hojas encontradas: ${wb.SheetNames.join(', ')}.`);
+            renderDashboard();
+        } catch(err) {
+            alert('No se pudo procesar el archivo Excel: ' + err.message);
+        } finally {
+            event.target.value = '';
+        }
+    }
+
+    window.onload = function() { renderDashboard(); };
+</script>

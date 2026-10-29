@@ -25,7 +25,7 @@
 </head>
 <body class="bg-[#f8fafc] text-slate-800 min-h-screen antialiased pb-12">
 
-    <!-- HEADER EJECUTIVO -->
+    <!-- HEADER CORPORATIVO -->
     <header class="bg-white/95 backdrop-blur border-b border-slate-200/80 sticky top-0 z-50 shadow-sm no-print">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
@@ -42,7 +42,7 @@
             </div>
 
             <div class="flex items-center space-x-2">
-                <button onclick="document.getElementById('excelFileInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-xs px-3 py-1.5 rounded-xl text-white font-bold shadow-sm shadow-emerald-600/10 flex items-center gap-1.5 transition-all">
+                <button onclick="document.getElementById('excelFileInput').click()" class="bg-emerald-600 hover:bg-emerald-700 text-xs px-3.5 py-1.5 rounded-xl text-white font-bold shadow-sm shadow-emerald-600/10 flex items-center gap-1.5 transition-all">
                     <i class="fa-solid fa-file-excel"></i>
                     <span class="hidden sm:inline">Subir Excel Mensual</span>
                 </button>
@@ -54,7 +54,7 @@
         </div>
     </header>
 
-    <!-- CONTENEDOR GENERAL -->
+    <!-- CONTENEDOR PRINCIPAL CON MENÚ LATERAL -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-5 flex flex-col md:flex-row gap-6">
 
         <!-- BARRA LATERAL IZQUIERDA -->
@@ -89,22 +89,22 @@
 
                 <div class="border-t border-slate-100 my-2 pt-2"></div>
                 <div class="text-[10px] font-extrabold text-slate-400 px-3 py-1 uppercase tracking-wider">Gestión Comercial</div>
-                <button onclick="showModule('vendedores')" id="btn-mod-vendedores" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <button onclick="showModule('ventas_vendedor')" id="btn-mod-ventas_vendedor" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
                     <i class="fa-solid fa-user-tie text-blue-600 w-4 text-center"></i> Ventas x Vendedor
                 </button>
-                <button onclick="showModule('categorias')" id="btn-mod-categorias" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
+                <button onclick="showModule('ventas_categoria')" id="btn-mod-ventas_categoria" class="w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all">
                     <i class="fa-solid fa-tags text-teal-600 w-4 text-center"></i> Ventas x Categoría
                 </button>
             </div>
         </aside>
 
-        <!-- CONTENIDO PRINCIPAL -->
+        <!-- CONTENIDO CENTRAL -->
         <main class="flex-1 space-y-6">
 
             <!-- DASHBOARD PRINCIPAL -->
             <div id="view-inicio" class="space-y-6">
                 <section class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-sm no-print">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Entidad / Sede</label>
                             <select id="entitySelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
@@ -114,44 +114,64 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Trimestre / Rango</label>
-                            <select id="rangePeriodSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
-                                <option value="Q3" selected>Trimestre Q3 (Julio - Septiembre)</option>
-                                <option value="Q1">Trimestre Q1 (Enero - Marzo)</option>
-                                <option value="Q2">Trimestre Q2 (Abril - Junio)</option>
-                                <option value="YTD">Acumulado Anual YTD</option>
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Modalidad Reporte</label>
+                            <select id="reportTypeSelect" onchange="handleReportTypeChange()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
+                                <option value="TRIMESTRE_RANGO" selected>3. Rango de Meses / Trimestre</option>
+                                <option value="MENSUAL">1. Informe Mensual</option>
+                                <option value="ACUMULADO">2. Acumulado YTD</option>
                             </select>
+                        </div>
+                        <div id="singlePeriodContainer" class="hidden">
+                            <label class="block text-[11px] font-bold text-slate-600 mb-1.5 uppercase">Mes de Corte</label>
+                            <select id="singlePeriodSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800">
+                                <option value="SEPTIEMBRE" selected>Septiembre 2026</option>
+                                <option value="AGOSTO">Agosto 2026</option><option value="JULIO">Julio 2026</option><option value="JUNIO">Junio 2026</option><option value="MAYO">Mayo 2026</option><option value="ABRIL">Abril 2026</option><option value="MARZO">Marzo 2026</option><option value="FEBRERO">Febrero 2026</option><option value="ENERO">Enero 2026</option>
+                            </select>
+                        </div>
+                        <div id="rangePeriodContainer" class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 mb-1.5 uppercase">Inicio</label>
+                                <select id="rangeStartSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800">
+                                    <option value="ENERO">Ene</option><option value="FEBRERO">Feb</option><option value="MARZO">Mar</option><option value="ABRIL">Abr</option><option value="MAYO">May</option><option value="JUNIO">Jun</option><option value="JULIO" selected>Jul</option><option value="AGOSTO">Ago</option><option value="SEPTIEMBRE">Sep</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-600 mb-1.5 uppercase">Fin</label>
+                                <select id="rangeEndSelect" onchange="renderDashboard()" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-2.5 py-2 text-xs font-bold text-slate-800">
+                                    <option value="SEPTIEMBRE" selected>Sep</option><option value="AGOSTO">Ago</option><option value="JULIO">Jul</option><option value="JUNIO">Jun</option><option value="MAYO">May</option><option value="ABRIL">Abr</option><option value="MARZO">Mar</option><option value="FEBRERO">Feb</option><option value="ENERO">Ene</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- KPIS -->
+                <!-- KPIS PRINCIPALES -->
                 <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
                     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">Ingresos Netos</div>
+                        <div class="text-slate-500 text-[11px] font-bold uppercase">1. Ingresos Netos</div>
                         <div id="kpiIngNetos" class="text-base sm:text-lg font-black text-slate-900 mt-1">$0</div>
                     </div>
                     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">Costo de Ventas</div>
+                        <div class="text-slate-500 text-[11px] font-bold uppercase">2. Costo de Ventas</div>
                         <div id="kpiCostoVentas" class="text-base sm:text-lg font-black text-slate-900 mt-1">$0</div>
                     </div>
                     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">Gastos Operativos</div>
+                        <div class="text-slate-500 text-[11px] font-bold uppercase">3. Gastos Operativos</div>
                         <div id="kpiGastosOperativos" class="text-base sm:text-lg font-black text-amber-600 mt-1">$0</div>
                     </div>
                     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">Utilidad Bruta</div>
+                        <div class="text-slate-500 text-[11px] font-bold uppercase">4. Utilidad Bruta</div>
                         <div id="kpiUtilBruta" class="text-base sm:text-lg font-black text-blue-700 mt-1">$0</div>
                     </div>
                     <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm ring-1 ring-emerald-500/10">
-                        <div class="text-slate-500 text-[11px] font-bold uppercase">Utilidad Neta</div>
+                        <div class="text-slate-500 text-[11px] font-bold uppercase">5. Utilidad Neta</div>
                         <div id="kpiUtilNeta" class="text-base sm:text-lg font-black text-emerald-600 mt-1">$0</div>
                     </div>
                 </section>
 
                 <!-- TABLA P&L -->
                 <section class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-                    <h3 class="text-sm font-extrabold text-slate-900 mb-4"><i class="fa-solid fa-table text-blue-600"></i> Estado de Resultados P&L</h3>
+                    <h3 class="text-sm font-extrabold text-slate-900 mb-4"><i class="fa-solid fa-table text-blue-600"></i> Estado de Resultados P&L — Desglose Comparativo</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-xs text-left text-slate-700">
                             <thead id="plTableHead" class="text-[10px] uppercase bg-slate-50 text-slate-600 border-b border-slate-200 font-extrabold"></thead>
@@ -162,155 +182,77 @@
             </div>
 
             <!-- MÓDULO: VENTAS POR VENDEDOR -->
-            <div id="view-vendedores" class="space-y-5 hidden">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-100 pb-4">
-                        <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-user-tie text-blue-600"></i> Ventas por Vendedor (Histórico Mes a Mes)
-                        </h2>
-                        <div class="flex items-center gap-2">
-                            <label class="text-[10px] font-bold text-slate-600 uppercase">Sede:</label>
-                            <select id="sel-sede-vendedores" onchange="renderVendedores()" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-xs text-slate-800 font-bold">
-                                <option value="PIPE_AUDIO" selected>PIPE AUDIO</option>
-                                <option value="JD_AUDIO">JD AUDIO</option>
-                                <option value="CONSOLIDADO">CONSOLIDADO</option>
-                            </select>
-                        </div>
+            <section id="view-ventas_vendedor" class="hidden bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 class="font-black text-slate-900 text-lg"><i class="fa-solid fa-user-tie text-blue-600 mr-2"></i> Ventas por Vendedor</h2>
+                        <p class="text-xs text-slate-500">Importe neto, participación y rentabilidad por vendedor según archivo cargado.</p>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-left text-slate-700">
-                            <thead class="text-[10px] uppercase bg-slate-50 text-slate-600 border-b font-extrabold">
-                                <tr>
-                                    <th class="py-2.5 px-3">Vendedor</th>
-                                    <th class="py-2.5 px-3 text-right">Ene-Mar ($)</th>
-                                    <th class="py-2.5 px-3 text-right">Abr-Jun ($)</th>
-                                    <th class="py-2.5 px-3 text-right">Jul-Sep ($)</th>
-                                    <th class="py-2.5 px-3 text-right font-black bg-blue-50 text-blue-800">Total Acumulado ($)</th>
-                                    <th class="py-2.5 px-3 text-right">% Participación</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbl-vendedores-body" class="divide-y divide-slate-100 font-mono"></tbody>
-                        </table>
+                    <div class="flex flex-wrap gap-2">
+                        <select id="seller-entity" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('seller')">
+                            <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO">Consolidado</option>
+                        </select>
+                        <select id="seller-period" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('seller')">
+                            <option value="2026-02">Febrero 2026</option><option value="2026-01">Enero 2026</option><option value="2026-Q1">1.er trimestre 2026</option><option value="2026-YTD">Acumulado 2026</option>
+                        </select>
                     </div>
                 </div>
-            </div>
+                <div id="seller-summary" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead class="bg-slate-50 uppercase text-[10px] font-extrabold text-slate-600">
+                            <tr><th class="p-3">Vendedor</th><th class="p-3 text-right">Ventas netas</th><th class="p-3 text-right">Participación</th><th class="p-3 text-right">Rentabilidad fuente</th></tr>
+                        </thead>
+                        <tbody id="seller-table" class="divide-y font-mono"></tbody>
+                    </table>
+                </div>
+                <p id="seller-note" class="text-xs text-amber-800 bg-amber-50 p-3 rounded-lg font-medium"></p>
+            </section>
 
             <!-- MÓDULO: VENTAS POR CATEGORÍA -->
-            <div id="view-categorias" class="space-y-5 hidden">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-100 pb-4">
-                        <h2 class="text-base font-extrabold text-slate-900 flex items-center gap-2">
-                            <i class="fa-solid fa-tags text-teal-600"></i> Ventas por Categoría de Productos (Rines, Llanta, Taller, Almacén)
-                        </h2>
-                        <div class="flex items-center gap-2">
-                            <label class="text-[10px] font-bold text-slate-600 uppercase">Sede:</label>
-                            <select id="sel-sede-categorias" onchange="renderCategorias()" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-xs text-slate-800 font-bold">
-                                <option value="PIPE_AUDIO" selected>PIPE AUDIO</option>
-                                <option value="JD_AUDIO">JD AUDIO</option>
-                                <option value="CONSOLIDADO">CONSOLIDADO</option>
-                            </select>
-                        </div>
+            <section id="view-ventas_categoria" class="hidden bg-white rounded-2xl border border-slate-200 p-5 space-y-4">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 class="font-black text-slate-900 text-lg"><i class="fa-solid fa-tags text-teal-600 mr-2"></i> Ventas por Categoría</h2>
+                        <p class="text-xs text-slate-500">Comparativo y composición por línea comercial (Rines, Llanta, Taller, Almacén, Grúa).</p>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-xs text-left text-slate-700">
-                            <thead class="text-[10px] uppercase bg-slate-50 text-slate-600 border-b font-extrabold">
-                                <tr>
-                                    <th class="py-2.5 px-3">Categoría</th>
-                                    <th class="py-2.5 px-3 text-right">Ene-Mar ($)</th>
-                                    <th class="py-2.5 px-3 text-right">Abr-Jun ($)</th>
-                                    <th class="py-2.5 px-3 text-right">Jul-Sep ($)</th>
-                                    <th class="py-2.5 px-3 text-right font-black bg-teal-50 text-teal-800">Total Acumulado ($)</th>
-                                    <th class="py-2.5 px-3 text-right">% Participación</th>
-                                </tr>
-                            </thead>
-                            <tbody id="tbl-categorias-body" class="divide-y divide-slate-100 font-mono"></tbody>
-                        </table>
+                    <div class="flex flex-wrap gap-2">
+                        <select id="category-entity" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('category')">
+                            <option value="PIPE_AUDIO">Pipe Audio</option><option value="JD_AUDIO">JD Audio</option><option value="CONSOLIDADO">Consolidado</option>
+                        </select>
+                        <select id="category-period" class="border border-slate-300 rounded-lg px-3 py-2 text-xs font-bold" onchange="renderSalesModule('category')">
+                            <option value="2026-02">Febrero 2026</option><option value="2026-01">Enero 2026</option><option value="2026-Q1">1.er trimestre 2026</option><option value="2026-YTD">Acumulado 2026</option>
+                        </select>
                     </div>
                 </div>
-            </div>
+                <div id="category-summary" class="grid grid-cols-1 sm:grid-cols-3 gap-3"></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs">
+                        <thead class="bg-slate-50 uppercase text-[10px] font-extrabold text-slate-600">
+                            <tr><th class="p-3">Categoría</th><th class="p-3 text-right">Ventas</th><th class="p-3 text-right">Participación</th><th class="p-3 text-right">Variación vs. periodo anterior</th></tr>
+                        </thead>
+                        <tbody id="category-table" class="divide-y font-mono"></tbody>
+                    </table>
+                </div>
+                <p id="category-note" class="text-xs text-amber-800 bg-amber-50 p-3 rounded-lg font-medium"></p>
+            </section>
 
             <!-- MÓDULOS DETALLADOS P&L -->
-            <div id="view-ingresos" class="space-y-5 hidden">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-4">
-                        <h2 class="text-base font-extrabold text-slate-900"><i class="fa-solid fa-sack-dollar text-emerald-600"></i> Módulo Detallado: Ingresos</h2>
-                        <select id="sel-sede-ingresos" onchange="renderDetailModule('ingresos')" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-xs font-bold">
-                            <option value="PIPE_AUDIO" selected>PIPE AUDIO</option><option value="JD_AUDIO">JD AUDIO</option><option value="CONSOLIDADO">CONSOLIDADO</option>
-                        </select>
-                    </div>
-                    <div class="overflow-x-auto"><table class="w-full text-xs"><tbody id="tbl-ingresos-body" class="divide-y font-mono"></tbody></table></div>
-                </div>
-            </div>
-
-            <div id="view-costos" class="space-y-5 hidden">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-4">
-                        <h2 class="text-base font-extrabold text-slate-900"><i class="fa-solid fa-boxes-stacked text-rose-600"></i> Módulo Detallado: Costos</h2>
-                        <select id="sel-sede-costos" onchange="renderDetailModule('costos')" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-xs font-bold">
-                            <option value="PIPE_AUDIO" selected>PIPE AUDIO</option><option value="JD_AUDIO">JD AUDIO</option><option value="CONSOLIDADO">CONSOLIDADO</option>
-                        </select>
-                    </div>
-                    <div class="overflow-x-auto"><table class="w-full text-xs"><tbody id="tbl-costos-body" class="divide-y font-mono"></tbody></table></div>
-                </div>
-            </div>
-
-            <div id="view-gastos_op" class="space-y-5 hidden">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-4">
-                        <h2 class="text-base font-extrabold text-slate-900"><i class="fa-solid fa-receipt text-amber-600"></i> Gastos Operativos</h2>
-                        <select id="sel-sede-gastos_op" onchange="renderDetailModule('gastos_op')" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-xs font-bold">
-                            <option value="PIPE_AUDIO" selected>PIPE AUDIO</option><option value="JD_AUDIO">JD AUDIO</option><option value="CONSOLIDADO">CONSOLIDADO</option>
-                        </select>
-                    </div>
-                    <div class="overflow-x-auto"><table class="w-full text-xs"><tbody id="tbl-gastos_op-body" class="divide-y font-mono"></tbody></table></div>
-                </div>
-            </div>
-
-            <div id="view-gastos_fin" class="space-y-5 hidden">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-4">
-                        <h2 class="text-base font-extrabold text-slate-900"><i class="fa-solid fa-percent text-red-600"></i> Gastos Financieros</h2>
-                        <select id="sel-sede-gastos_fin" onchange="renderDetailModule('gastos_fin')" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-xs font-bold">
-                            <option value="PIPE_AUDIO" selected>PIPE AUDIO</option><option value="JD_AUDIO">JD AUDIO</option><option value="CONSOLIDADO">CONSOLIDADO</option>
-                        </select>
-                    </div>
-                    <div class="overflow-x-auto"><table class="w-full text-xs"><tbody id="tbl-gastos_fin-body" class="divide-y font-mono"></tbody></table></div>
-                </div>
-            </div>
-
-            <div id="view-otros_ing" class="space-y-5 hidden">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-4">
-                        <h2 class="text-base font-extrabold text-slate-900"><i class="fa-solid fa-hand-holding-dollar text-sky-600"></i> Otros Ingresos</h2>
-                        <select id="sel-sede-otros_ing" onchange="renderDetailModule('otros_ing')" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-xs font-bold">
-                            <option value="PIPE_AUDIO" selected>PIPE AUDIO</option><option value="JD_AUDIO">JD AUDIO</option><option value="CONSOLIDADO">CONSOLIDADO</option>
-                        </select>
-                    </div>
-                    <div class="overflow-x-auto"><table class="w-full text-xs"><tbody id="tbl-otros_ing-body" class="divide-y font-mono"></tbody></table></div>
-                </div>
-            </div>
-
-            <div id="view-utilidad_neta" class="space-y-5 hidden">
-                <div class="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-4">
-                        <h2 class="text-base font-extrabold text-slate-900"><i class="fa-solid fa-scale-balanced text-indigo-600"></i> Utilidad Neta</h2>
-                        <select id="sel-sede-utilidad_neta" onchange="renderDetailModule('utilidad_neta')" class="bg-white border border-slate-300 rounded-lg px-3 py-1 text-xs font-bold">
-                            <option value="PIPE_AUDIO" selected>PIPE AUDIO</option><option value="JD_AUDIO">JD AUDIO</option><option value="CONSOLIDADO">CONSOLIDADO</option>
-                        </select>
-                    </div>
-                    <div class="overflow-x-auto"><table class="w-full text-xs"><tbody id="tbl-utilidad_neta-body" class="divide-y font-mono"></tbody></table></div>
-                </div>
-            </div>
+            <div id="view-ingresos" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-sack-dollar text-emerald-600"></i> Ingresos Detallados</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de ingresos operacionales.</div></div></div>
+            <div id="view-costos" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-boxes-stacked text-rose-600"></i> Costos Detallados</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de costos de mercancía.</div></div></div>
+            <div id="view-gastos_op" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-receipt text-amber-600"></i> Gastos Operativos</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de gastos de administración y ventas.</div></div></div>
+            <div id="view-gastos_fin" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-percent text-red-600"></i> Gastos Financieros</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de comisiones y gastos financieros.</div></div></div>
+            <div id="view-otros_ing" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-hand-holding-dollar text-sky-600"></i> Otros Ingresos</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de otros ingresos y grúa.</div></div></div>
+            <div id="view-utilidad_neta" class="space-y-5 hidden"><div class="bg-white rounded-2xl p-6 border shadow-sm"><h2 class="text-base font-bold text-slate-900 mb-3"><i class="fa-solid fa-scale-balanced text-indigo-600"></i> Utilidad Neta</h2><div class="text-xs text-slate-600 font-mono">Vista sincronizada de cascada de utilidades NIIF.</div></div></div>
 
         </main>
     </div>
 
-    <!-- SCRIPT DE CÁLCULO Y CARGA DINÁMICA DE EXCEL -->
+    <!-- SCRIPT DE CÁLCULO Y CARGA EXCEL -->
     <script>
         const MONTH_ORDER = ["ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
-        const MODULES = ['inicio', 'ingresos', 'costos', 'gastos_op', 'gastos_fin', 'otros_ing', 'utilidad_neta', 'vendedores', 'categorias'];
+        const MODULES = ['inicio', 'ingresos', 'costos', 'gastos_op', 'gastos_fin', 'otros_ing', 'utilidad_neta', 'ventas_vendedor', 'ventas_categoria'];
 
-        // BASE DE DATOS INICIAL (PIPE AUDIO Y JD AUDIO)
         let DB = {
             "PIPE_AUDIO": {
                 "ENERO": {ing_brutos:415320909,dev_ventas:5807764,costo_ventas:249290144,gastos_admin:86704160,gastos_ventas:5666362,gastos_fin:10921140,otros_ing:29040600},
@@ -336,47 +278,36 @@
             }
         };
 
-        // DATOS COMERCIALES: VENDEDORES Y CATEGORÍAS (HISTÓRICOS TRIMESTRALES Y MENSUALES)
-        let DB_COMERCIAL = {
-            "PIPE_AUDIO": {
-                vendedores: [
-                    { nombre: "JOSEPH", q1: 180000000, q2: 195000000, q3: 210000000 },
-                    { nombre: "LUIS PINEDA", q1: 150000000, q2: 160000000, q3: 175000000 },
-                    { nombre: "ANDRES", q1: 140000000, q2: 145000000, q3: 155000000 },
-                    { nombre: "JUAN DIEGO", q1: 130000000, q2: 138000000, q3: 148000000 },
-                    { nombre: "DARIO COGOLLO", q1: 120000000, q2: 125000000, q3: 135000000 },
-                    { nombre: "MARIA JOSE", q1: 110000000, q2: 115000000, q3: 125000000 },
-                    { nombre: "CARLOS", q1: 95000000, q2: 102000000, q3: 112000000 },
-                    { nombre: "PIPES AUDIO", q1: 250000000, q2: 270000000, q3: 310000000 }
-                ],
-                categorias: [
-                    { nombre: "RINES", q1: 85000000, q2: 92000000, q3: 105000000 },
-                    { nombre: "LLANTA", q1: 195000000, q2: 210000000, q3: 235000000 },
-                    { nombre: "TALLER", q1: 140000000, q2: 150000000, q3: 168000000 },
-                    { nombre: "ALMACÉN", q1: 310000000, q2: 335000000, q3: 362000000 }
-                ]
-            },
-            "JD_AUDIO": {
-                vendedores: [
-                    { nombre: "JOSEPH", q1: 40000000, q2: 45000000, q3: 50000000 },
-                    { nombre: "LUIS PINEDA", q1: 35000000, q2: 38000000, q3: 42000000 },
-                    { nombre: "ANDRES", q1: 30000000, q2: 32000000, q3: 35000000 },
-                    { nombre: "JUAN DIEGO", q1: 28000000, q2: 30000000, q3: 33000000 },
-                    { nombre: "DARIO COGOLLO", q1: 25000000, q2: 27000000, q3: 30000000 },
-                    { nombre: "MARIA JOSE", q1: 22000000, q2: 24000000, q3: 26000000 },
-                    { nombre: "CARLOS", q1: 18000000, q2: 20000000, q3: 22000000 },
-                    { nombre: "PIPES AUDIO", q1: 50000000, q2: 55000000, q3: 60000000 }
-                ],
-                categorias: [
-                    { nombre: "RINES", q1: 20000000, q2: 22000000, q3: 25000000 },
-                    { nombre: "LLANTA", q1: 45000000, q2: 48000000, q3: 52000000 },
-                    { nombre: "TALLER", q1: 30000000, q2: 33000000, q3: 38000000 },
-                    { nombre: "ALMACÉN", q1: 70000000, q2: 75000000, q3: 82000000 }
-                ]
-            }
-        };
+        // DATOS COMERCIALES INICIALES (DEMO / EJEMPLO)
+        let FINSALES_KEY = 'finsight_cfo_sales_v2';
+        let FINSALES = JSON.parse(localStorage.getItem(FINSALES_KEY) || '{"seller":[],"category":[]}');
 
-        let DB_DETALLES = {};
+        // Si no hay datos comerciales guardados, sembramos datos iniciales basados en tus formatos
+        if(FINSALES.seller.length === 0) {
+            FINSALES.seller = [
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'JOSEPH', value:113370167, profit:40.64},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'LUIS PINEDA', value:82197009, profit:61.33},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'ANDRES', value:49812395, profit:54.06},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'JUAN DIEGO', value:43167101, profit:62.09},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'DARIO COGOLLO', value:38995336, profit:53.70},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'MARIA JOSE', value:37966176, profit:59.78},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'CARLOS', value:31101487, profit:61.21},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'PIPES AUDIO', value:25730000, profit:47.63}
+            ];
+            FINSALES.category = [
+                {entity:'PIPE_AUDIO', year:2026, month:1, name:'GRUA', value:8947705},
+                {entity:'PIPE_AUDIO', year:2026, month:1, name:'RINES', value:8739495.79},
+                {entity:'PIPE_AUDIO', year:2026, month:1, name:'LLANTA', value:31529411.66},
+                {entity:'PIPE_AUDIO', year:2026, month:1, name:'TALLER', value:28539841.5},
+                {entity:'PIPE_AUDIO', year:2026, month:1, name:'ALMACEN', value:176541558.61},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'GRUA', value:29040600},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'RINES', value:16163865.57},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'LLANTA', value:53055042},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'TALLER', value:52276848.28},
+                {entity:'PIPE_AUDIO', year:2026, month:2, name:'ALMACEN', value:236501999.04}
+            ];
+            localStorage.setItem(FINSALES_KEY, JSON.stringify(FINSALES));
+        }
 
         function showModule(mod) {
             MODULES.forEach(m => {
@@ -391,9 +322,8 @@
                     btn.className = "w-full text-left flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-all";
                 }
             });
-            if (mod === 'vendedores') renderVendedores();
-            else if (mod === 'categorias') renderCategorias();
-            else if (mod !== 'inicio') renderDetailModule(mod);
+            if (mod === 'ventas_vendedor') renderSalesModule('seller');
+            else if (mod === 'ventas_categoria') renderSalesModule('category');
         }
 
         function formatCOP(val) { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 }).format(val); }
@@ -410,15 +340,14 @@
             const type = document.getElementById('reportTypeSelect').value;
             if (type === 'MENSUAL') return [document.getElementById('singlePeriodSelect').value];
             if (type === 'ACUMULADO') return MONTH_ORDER.slice(0, MONTH_ORDER.indexOf(document.getElementById('singlePeriodSelect').value) + 1);
-            let range = document.getElementById('rangePeriodSelect').value;
-            if (range === 'Q1') return ["ENERO", "FEBRERO", "MARZO"];
-            if (range === 'Q2') return ["ABRIL", "MAYO", "JUNIO"];
-            if (range === 'Q3') return ["JULIO", "AGOSTO", "SEPTIEMBRE"];
-            return MONTH_ORDER.slice(0, 9);
+            let s = MONTH_ORDER.indexOf(document.getElementById('rangeStartSelect').value);
+            let e = MONTH_ORDER.indexOf(document.getElementById('rangeEndSelect').value);
+            if (s > e) [s, e] = [e, s];
+            return MONTH_ORDER.slice(s, e + 1);
         }
 
         function aggregateRawData(entity, months) {
-            let agg = { ing_brutos: 0, dev_ventas: 0, costo_ventas: 0, gastos_admin: 0, gastos_ventas: 0, gastos_fin: 0, outros_ing: 0 };
+            let agg = { ing_brutos: 0, dev_ventas: 0, costo_ventas: 0, gastos_admin: 0, gastos_ventas: 0, gastos_fin: 0, otros_ing: 0 };
             months.forEach(m => {
                 if (entity === 'CONSOLIDADO') {
                     Object.keys(DB).forEach(eKey => {
@@ -456,7 +385,7 @@
 
             const thead = document.getElementById('plTableHead');
             const tbody = document.getElementById('plTableBody');
-            thead.innerHTML = `<tr><th class="py-2.5 px-3">Concepto P&L</th>` + months.map(m => `<th class="py-2.5 px-3 text-right">${m.substring(0,3)}</th>`).join('') + `<th class="py-2.5 px-3 text-right bg-emerald-50 text-emerald-800">TOTAL</th></tr>`;
+            thead.innerHTML = `<tr><th class="py-2.5 px-3">Concepto P&L</th>` + months.map(m => `<th class="py-2.5 px-3 text-right">${m.substring(0,3)}</th>`).join('') + `<th class="py-2.5 px-3 text-right bg-emerald-50 text-emerald-800">TOTAL RANGO</th></tr>`;
             
             const rows = [
                 { label: 'Ingresos Operacionales Netos', key: 'ing_netos' },
@@ -480,98 +409,151 @@
             }).join('');
         }
 
-        function renderVendedores() {
-            const sede = document.getElementById('sel-sede-vendedores').value;
-            const tbody = document.getElementById('tbl-vendedores-body');
-            
-            let list = [];
-            if (sede === 'CONSOLIDADO') {
-                // Sumar ambos
-                let mapV = {};
-                ['PIPE_AUDIO', 'JD_AUDIO'].forEach(s => {
-                    (DB_COMERCIAL[s]?.vendedores || []).forEach(v => {
-                        if (!mapV[v.nombre]) mapV[v.nombre] = { q1: 0, q2: 0, q3: 0 };
-                        mapV[v.nombre].q1 += v.q1; mapV[v.nombre].q2 += v.q2; mapV[v.nombre].q3 += v.q3;
-                    });
-                });
-                list = Object.keys(mapV).map(nombre => ({ nombre, ...mapV[nombre] }));
+        function periodMonths(p){ 
+            if(p.endsWith('-Q1')) return [1,2,3]; 
+            if(p.endsWith('-YTD')) return [1,2,3,4,5,6,7,8,9,10,11,12]; 
+            return [Number(p.slice(5,7))]; 
+        }
+
+        function periodLabel(p){
+            return p.endsWith('-Q1') ? 'Q1 2026' : p.endsWith('-YTD') ? 'Acumulado 2026' : new Date(Number(p.slice(0,4)), Number(p.slice(5,7))-1, 1).toLocaleDateString('es-CO',{month:'long',year:'numeric'});
+        }
+
+        function renderSalesModule(type){
+            const isSeller = type === 'seller', key = isSeller ? 'seller' : 'category';
+            const entity = document.getElementById(isSeller ? 'seller-entity' : 'category-entity')?.value || 'PIPE_AUDIO';
+            const period = document.getElementById(isSeller ? 'seller-period' : 'category-period')?.value || '2026-02';
+            const months = periodMonths(period);
+
+            let records = [];
+            if(entity === 'CONSOLIDADO') {
+                records = FINSALES[key].filter(r => r.year === 2026 && months.includes(r.month));
             } else {
-                list = DB_COMERCIAL[sede]?.vendedores || [];
+                records = FINSALES[key].filter(r => r.entity === entity && r.year === 2026 && months.includes(r.month));
             }
 
-            const total = list.reduce((acc, v) => acc + v.q1 + v.q2 + v.q3, 0);
-            tbody.innerHTML = list.map(v => {
-                const totV = v.q1 + v.q2 + v.q3;
-                return `<tr>
-                    <td class="py-2.5 px-3 font-bold text-slate-800">${v.nombre}</td>
-                    <td class="py-2.5 px-3 text-right">${formatCOP(v.q1)}</td>
-                    <td class="py-2.5 px-3 text-right">${formatCOP(v.q2)}</td>
-                    <td class="py-2.5 px-3 text-right">${formatCOP(v.q3)}</td>
-                    <td class="py-2.5 px-3 text-right font-black text-blue-900 bg-blue-50/40">${formatCOP(totV)}</td>
-                    <td class="py-2.5 px-3 text-right text-slate-500">${formatPct(total > 0 ? totV / total : 0)}</td>
-                </tr>`;
-            }).join('');
+            const group = {};
+            records.forEach(r => {
+                const k = r.name;
+                if(!group[k]) group[k] = { value: 0, profit: null };
+                group[k].value += r.value;
+                if(r.profit != null) group[k].profit = r.profit;
+            });
+
+            const total = Object.values(group).reduce((a, b) => a + b.value, 0);
+            const rows = Object.entries(group).sort((a, b) => b[1].value - a[1].value);
+
+            const summaryId = isSeller ? 'seller-summary' : 'category-summary';
+            const tableId = isSeller ? 'seller-table' : 'category-table';
+
+            document.getElementById(summaryId).innerHTML = [
+                ['Ventas del periodo', formatCOP(total)],
+                ['Registros procesados', records.length],
+                ['Periodo consultado', periodLabel(period)]
+            ].map(x => `<div class="bg-slate-50 border border-slate-200 rounded-xl p-3"><div class="text-[10px] uppercase font-bold text-slate-500">${x[0]}</div><div class="font-black text-slate-900 mt-1">${x[1]}</div></div>`).join('');
+
+            document.getElementById(tableId).innerHTML = rows.map(([name, v]) => `
+                <tr class="border-t border-slate-100 hover:bg-slate-50/50">
+                    <td class="p-3 font-bold text-slate-800">${name}</td>
+                    <td class="p-3 text-right font-mono font-semibold">${formatCOP(v.value)}</td>
+                    <td class="p-3 text-right font-mono">${total > 0 ? (v.value / total * 100).toFixed(2) + '%' : '—'}</td>
+                    <td class="p-3 text-right font-mono">${isSeller && v.profit != null ? v.profit.toFixed(2) + '%' : (isSeller ? 'N/D' : 'Consolidado línea')}</td>
+                </tr>
+            `).join('') || `<tr><td colspan="4" class="p-6 text-center text-slate-500 font-medium">Sin registros importados para este filtro. Sube un archivo Excel para alimentar este módulo.</td></tr>`;
+
+            document.getElementById(isSeller ? 'seller-note' : 'category-note').textContent = records.length ? 
+                `Mostrando información de ${records.length} registros reales almacenados para ${periodLabel(period)} (${entity}).` : 
+                `No hay datos para este filtro. Usa el botón "Subir Excel Mensual" para importar el informe comercial correspondiente.`;
         }
 
-        function renderCategorias() {
-            const sede = document.getElementById('sel-sede-categorias').value;
-            const tbody = document.getElementById('tbl-categorias-body');
-
-            let list = [];
-            if (sede === 'CONSOLIDADO') {
-                let mapC = {};
-                ['PIPE_AUDIO', 'JD_AUDIO'].forEach(s => {
-                    (DB_COMERCIAL[s]?.categorias || []).forEach(c => {
-                        if (!mapC[c.nombre]) mapC[c.nombre] = { q1: 0, q2: 0, q3: 0 };
-                        mapC[c.nombre].q1 += c.q1; mapC[c.nombre].q2 += c.q2; mapC[c.nombre].q3 += c.q3;
-                    });
-                });
-                list = Object.keys(mapC).map(nombre => ({ nombre, ...mapC[nombre] }));
-            } else {
-                list = DB_COMERCIAL[sede]?.categorias || [];
-            }
-
-            const total = list.reduce((acc, c) => acc + c.q1 + c.q2 + c.q3, 0);
-            tbody.innerHTML = list.map(c => {
-                const totC = c.q1 + c.q2 + c.q3;
-                return `<tr>
-                    <td class="py-2.5 px-3 font-bold text-slate-800">${c.nombre}</td>
-                    <td class="py-2.5 px-3 text-right">${formatCOP(c.q1)}</td>
-                    <td class="py-2.5 px-3 text-right">${formatCOP(c.q2)}</td>
-                    <td class="py-2.5 px-3 text-right">${formatCOP(c.q3)}</td>
-                    <td class="py-2.5 px-3 text-right font-black text-teal-900 bg-teal-50/40">${formatCOP(totC)}</td>
-                    <td class="py-2.5 px-3 text-right text-slate-500">${formatPct(total > 0 ? totC / total : 0)}</td>
-                </tr>`;
-            }).join('');
-        }
-
-        function renderDetailModule(mod) {
-            const sede = document.getElementById(`sel-sede-${mod}`).value;
-            const tbody = document.getElementById(`tbl-${mod}-body`);
-            if (!tbody) return;
-            tbody.innerHTML = `<tr><td class="py-4 text-center text-slate-500">Módulo ${mod} sincronizado para ${sede.replace(/_/g, ' ')}.</td></tr>`;
-        }
-
-        // MOTOR DE CARGA DINÁMICA DE ARCHIVOS EXCEL EN LA WEB
-        function handleExcelUpload(event) {
+        // IMPORTADOR INTELIGENTE DE EXCEL EN LA WEB
+        async function handleExcelUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    alert(`¡Archivo "${file.name}" cargado y leído con éxito! Se detectaron ${workbook.SheetNames.length} pestañas.`);
-                    // Aquí puedes extender la lógica para procesar las hojas y actualizar DB dinámicamente.
-                    renderDashboard();
-                } catch (err) {
-                    alert('Error al procesar el archivo Excel: ' + err.message);
+            try {
+                const wb = XLSX.read(await file.arrayBuffer(), { type: 'array' });
+                const fname = file.name.toLowerCase();
+                let kind = fname.includes('vendedor') ? 'seller' : (fname.includes('categoria') || fname.includes('categoría')) ? 'category' : 'finance';
+                
+                if(kind === 'finance') {
+                    alert('Archivo financiero detectado. Para actualizar el P&L general, asegúrate de utilizar la estructura estándar de las sedes.');
+                    return;
                 }
-            };
-            reader.readAsArrayBuffer(file);
+
+                const entityRaw = prompt('¿A qué sede pertenece este archivo? Escribe PIPE_AUDIO o JD_AUDIO:', 'PIPE_AUDIO');
+                if(!entityRaw) return;
+                const entity = entityRaw.trim().toUpperCase().replace(/\s+/g, '_');
+                if(!['PIPE_AUDIO', 'JD_AUDIO'].includes(entity)) {
+                    alert('Sede no válida. Debe ser PIPE_AUDIO o JD_AUDIO.');
+                    return;
+                }
+
+                const monthNum = prompt('¿A qué mes corresponde este informe (número de 1 a 12, ej. 2 para Febrero)?', '2');
+                if(!monthNum ||isNaN(monthNum)) return;
+                const m = Number(monthNum);
+
+                const ws = wb.Sheets[wb.SheetNames[0]];
+                const grid = XLSX.utils.sheet_to_json(ws, { header: 1, defval: null });
+                let imported = [];
+
+                if(kind === 'seller') {
+                    let headerIdx = grid.findIndex(row => row.some(c => String(c||'').toLowerCase().includes('vendedor')));
+                    if(headerIdx < 0) throw new Error('No se encontró la columna Vendedor en el archivo.');
+                    const hdr = grid[headerIdx].map(x => String(x||'').toLowerCase().trim());
+                    const nameIdx = hdr.findIndex(x => x.includes('vendedor'));
+                    const valueIdx = hdr.findIndex(x => x === 'neto' || x.includes('neto'));
+                    const profitIdx = hdr.findIndex(x => x.includes('rent'));
+                    if(nameIdx < 0 || valueIdx < 0) throw new Error('El archivo de vendedor debe contener columnas de Vendedor y Neto.');
+
+                    for(const row of grid.slice(headerIdx + 1)) {
+                        const name = String(row[nameIdx] || '').trim();
+                        const value = Number(row[valueIdx]);
+                        if(!name || /total/i.test(name) || !Number.isFinite(value)) continue;
+                        const profit = profitIdx >= 0 && Number.isFinite(Number(row[profitIdx])) ? Number(row[profitIdx]) : null;
+                        imported.push({ entity, year: 2026, month: m, name, value, profit, source: file.name });
+                    }
+                } else {
+                    let headerIdx = grid.findIndex(row => row.some(c => String(c||'').toLowerCase().includes('productos y servicios') || String(c||'').toLowerCase().includes('categoría')));
+                    if(headerIdx < 0) headerIdx = 0; // fallback
+                    const hdr = grid[headerIdx].map(x => String(x||'').toLowerCase().trim());
+                    const nameIdx = hdr.findIndex(x => x.includes('producto') || x.includes('categoría') || x.includes('servicios')) >= 0 ? hdr.findIndex(x => x.includes('producto') || x.includes('categoría') || x.includes('servicios')) : 0;
+                    
+                    // Buscar columna numérica del mes o tomar la última columna relevante
+                    for(const row of grid.slice(headerIdx + 1)) {
+                        const name = String(row[nameIdx] || '').trim();
+                        if(!name || /total/i.test(name)) continue;
+                        // Tomar el primer valor numérico válido de la fila como monto del mes
+                        let val = 0;
+                        for(let c = 1; c < row.length; c++) {
+                            if(Number.isFinite(Number(row[c])) && Number(row[c]) > 1000) {
+                                val = Number(row[c]);
+                                break;
+                            }
+                        }
+                        if(val > 0) {
+                            imported.push({ entity, year: 2026, month: m, name: name.toUpperCase(), value: val, source: file.name });
+                        }
+                    }
+                }
+
+                if(!imported.length) throw new Error('No se detectaron filas válidas para importar.');
+
+                // Política de reemplazo por sede y mes para evitar duplicados
+                FINSALES[kind] = FINSALES[kind].filter(r => !(r.entity === entity && r.month === m && r.year === 2026));
+                FINSALES[kind].push(...imported);
+                localStorage.setItem(FINSALES_KEY, JSON.stringify(FINSALES));
+
+                alert(`¡Importación exitosa! Se guardaron ${imported.length} registros comerciales para ${entity} (Mes ${m}). Los módulos se han actualizado.`);
+                showModule(kind === 'seller' ? 'ventas_vendedor' : 'ventas_categoria');
+
+            } catch(err) {
+                alert('Error al procesar el archivo Excel: ' + err.message);
+            } finally {
+                event.target.value = '';
+            }
         }
 
-        window.onload = function() { renderDashboard(); };
+        window.onload = function() { handleReportTypeChange(); };
     </script>
 </body>
 </html>

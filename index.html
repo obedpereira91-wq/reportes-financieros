@@ -237,7 +237,8 @@
 
         function showModule(mod) {
             ['view-inicio', 'view-vendedores', 'view-categorias'].forEach(id => {
-                document.getElementById(id).classList.add('hidden');
+                const el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
             });
             ['inicio', 'ingresos', 'costos', 'gastos_op', 'gastos_fin', 'otros_ing', 'utilidad_neta', 'vendedores', 'categorias'].forEach(m => {
                 const btn = document.getElementById(`btn-mod-${m}`);

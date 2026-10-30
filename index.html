@@ -429,3 +429,1376 @@ script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     window.onload = function() { renderDashboard(); };
 </script>
+<!-- ACTUALIZACIÓN: IMPORTADOR FINANCIERO PPAM 2026 -->
+<style>
+  .fs-panel {
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #cbd5e1;
+    border-radius: 14px;
+    background: white;
+    color: #0f172a;
+    font-family: system-ui, sans-serif;
+  }
+
+  .fs-notice {
+    padding: 12px;
+    margin: 12px 0;
+    border-radius: 10px;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-line;
+  }
+
+  .fs-warning {
+    background: #fffbeb;
+    border-color: #fcd34d;
+    color: #92400e;
+  }
+
+  .fs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .fs-table th,
+  .fs-table td {
+    padding: 9px;
+    border-bottom: 1px solid #e2e8f0;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .fs-table th:first-child,
+  .fs-table td:first-child {
+    text-align: left;
+    white-space: normal;
+    min-width: 180px;
+  }
+
+  .fs-table th {
+    background: #f8fafc;
+    color: #475569;
+  }
+
+  .fs-table .fs-total {
+    font-weight: 800;
+    background: #f1f5f9;
+  }
+
+  .fs-scroll {
+    overflow-x: auto;
+  }
+
+  #fs-import-dialog {
+    width: min(880px, 95vw);
+    max-height: 88vh;
+    overflow: auto;
+    border: 1px solid #cbd5e1;
+    border-radius: 16px;
+    padding: 24px;
+    background: white;
+    color: #0f172a;
+    font-family: system-ui, sans-serif;
+  }
+
+  #fs-import-dialog::backdrop {
+    background: rgb(15 23 42 / 65%);
+  }
+
+  #fs-import-dialog h2 {
+    font-size: 20px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  #fs-import-dialog p {
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  #fs-import-dialog select {
+    padding: 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+  }
+
+  #fs-import-dialog button {
+    padding: 10px 16px;
+    margin: 12px 8px 0 0;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  #fs-import-apply {
+    color: white;
+    background: #059669;
+  }
+
+  #fs-import-apply:disabled {
+    opacity: .4;
+    cursor: not-allowed;
+  }
+
+  @media print {
+    #fs-import-dialog,
+    #fs-filters {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  "use strict";
+
+  const STORAGE_KEY = "finsight_ppam_financial_v3";
+  const YEAR = 2026;
+  const TOLERANCE = 1;
+
+  const MONTHS = [
+    "ENERO", "FEBRERO", "MARZO", "ABRIL",
+    "MAYO", "JUNIO", "JULIO", "AGOSTO",
+    "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"
+  ];
+
+  const FIELDS = [
+    "ing_brutos",
+    "dev_ventas",
+    "costo_ventas",
+    "gastos_op",
+    "gastos_fin",
+    "otros_ing"
+  ];
+
+  const FINANCIAL_MODULES = [
+    "ingresos",
+    "costos",
+    "gastos_op",
+    "gastos_fin",
+    "otros_ing",
+    "utilidad_neta"
+  ];
+
+  const SPECS = [
+    {
+      sheet: "Ingresos",
+      key: "ingresos",
+      field: "ing_brutos",
+      total: "INGRESOS OPERATIVOS BRUTOS"
+    },
+    {
+      sheet: "Costos",
+      key: "costos",
+      field: "costo_ventas",
+      total: "COSTO DE VENTA"
+    },
+    {
+      sheet: "Gastos_Op",
+      key: "gastos_op",
+      field: "gastos_op",
+      total: "TOTAL GASTOS OPERATIVOS"
+    },
+    {
+      sheet: "Gastos_Fin",
+      key: "gastos_fin",
+      field: "gastos_fin",
+      total: "TOTAL GASTOS FINANCIEROS"
+    },
+    {
+      sheet: "Otros_Ing",
+      key: "otros_ing",
+      field: "otros_ing",
+      total: "TOTAL OTROS INGRESOS"
+    }
+  ];
+
+  const COP = new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 2
+  });
+
+  let imports = {};
+  let pending = null;
+  let activeModule = "inicio";
+
+  const $ = id => document.getElementById(id);
+
+  const normalize = value => String(value ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase()
+    .replace(/\s+/g, " ")
+    .trim();
+
+  const escapeHTML = value => String(value ?? "")
+    .replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[character]);
+
+  const money = value => (
+    value === null || !Number.isFinite(value)
+      ? "N/D"
+      : COP.format(value)
+  );
+
+  function number(value, location, allowBlank = false) {
+    if (value === null || value === undefined || value === "") {
+      if (allowBlank) return 0;
+      throw new Error(
+        `Falta un valor en ${location}. No se sustituye por cero.`
+      );
+    }
+
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return value;
+    }
+
+    let text = String(value)
+      .trim()
+      .replace(/\$/g, "")
+      .replace(/\s/g, "");
+
+    if (text === "-") return 0;
+
+    if (/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(text)) {
+      text = text.replace(/\./g, "").replace(",", ".");
+    } else if (/^-?\d+,\d+$/.test(text)) {
+      text = text.replace(",", ".");
+    }
+
+    if (!/^-?\d+(\.\d+)?$/.test(text)) {
+      throw new Error(
+        `Valor no numérico en ${location}: ${value}`
+      );
+    }
+
+    const result = Number(text);
+
+    if (!Number.isFinite(result)) {
+      throw new Error(`Valor inválido en ${location}.`);
+    }
+
+    return result;
+  }
+
+  function calculate(raw) {
+    const ingresos = raw.ing_brutos - raw.dev_ventas;
+    const bruta = ingresos - raw.costo_ventas;
+    const operativa = bruta - raw.gastos_op;
+    const resultado = operativa - raw.gastos_fin + raw.otros_ing;
+
+    return {
+      ...raw,
+      ing_netos: ingresos,
+      util_bruta: bruta,
+      util_op: operativa,
+      util_neta: resultado,
+      margen_bruto: ingresos !== 0 ? bruta / ingresos : null,
+      margen_operativo: ingresos !== 0 ? operativa / ingresos : null,
+      margen_resultado: ingresos !== 0 ? resultado / ingresos : null
+    };
+  }
+
+  function selectedEntities(entity) {
+    return entity === "CONSOLIDADO"
+      ? Object.keys(DB)
+      : [entity];
+  }
+
+  function available(entity, months) {
+    return selectedEntities(entity).every(key => {
+      if (imports[key]) {
+        return months.every(month =>
+          Object.prototype.hasOwnProperty.call(
+            imports[key].data,
+            month
+          )
+        );
+      }
+
+      return months.every(month =>
+        Object.prototype.hasOwnProperty.call(
+          DB[key] || {},
+          month
+        )
+      );
+    });
+  }
+
+  function aggregate(entity, months) {
+    const total = Object.fromEntries(
+      FIELDS.map(field => [field, 0])
+    );
+
+    for (const key of selectedEntities(entity)) {
+      for (const month of months) {
+        const row = DB[key]?.[month];
+        if (!row) continue;
+
+        total.ing_brutos += row.ing_brutos || 0;
+        total.dev_ventas += row.dev_ventas || 0;
+        total.costo_ventas += row.costo_ventas || 0;
+
+        total.gastos_op += row.gastos_op_total
+          ?? ((row.gastos_admin || 0) + (row.gastos_ventas || 0));
+
+        total.gastos_fin += row.gastos_fin || 0;
+        total.otros_ing += row.otros_ing || 0;
+      }
+    }
+
+    return total;
+  }
+
+  function parseWorkbook(workbook, filename) {
+    const parsed = {
+      filename,
+      entity: null,
+      sheets: {},
+      checks: [],
+      suggestedCutoff: 1
+    };
+
+    for (const spec of SPECS) {
+      const sheetName = workbook.SheetNames.find(
+        name => normalize(name) === normalize(spec.sheet)
+      );
+
+      if (!sheetName) {
+        throw new Error(`Falta la hoja ${spec.sheet}.`);
+      }
+
+      const rows = XLSX.utils.sheet_to_json(
+        workbook.Sheets[sheetName],
+        {
+          header: 1,
+          raw: true,
+          defval: null
+        }
+      );
+
+      const headerIndex = rows.findIndex(row =>
+        row.filter(value =>
+          MONTHS.includes(normalize(value))
+        ).length >= 3
+      );
+
+      if (headerIndex < 0) {
+        throw new Error(
+          `No se encontró el encabezado de meses en ${sheetName}.`
+        );
+      }
+
+      const entityText = normalize(rows[2]?.[0]);
+
+      const entity = /\bJD AUDIO\b/.test(entityText)
+        ? "JD_AUDIO"
+        : /\bPIPES? AUDIO\b/.test(entityText)
+          ? "PIPE_AUDIO"
+          : null;
+
+      if (!entity) {
+        throw new Error(
+          `No se reconoce PIPE AUDIO o JD AUDIO en A3 de ${sheetName}.`
+        );
+      }
+
+      if (parsed.entity && parsed.entity !== entity) {
+        throw new Error("Las hojas del libro corresponden a sedes distintas.");
+      }
+
+      parsed.entity = entity;
+
+      const header = rows[headerIndex];
+
+      const columns = MONTHS.map(month => {
+        const matches = [];
+
+        header.forEach((value, index) => {
+          if (normalize(value) === month) matches.push(index);
+        });
+
+        if (matches.length !== 1) {
+          throw new Error(
+            `El mes ${month} falta o está duplicado en ${sheetName}.`
+          );
+        }
+
+        return matches[0];
+      });
+
+      const accumulatedColumn = header.findIndex(
+        value => normalize(value) === "ACUMULADO"
+      );
+
+      const records = rows
+        .slice(headerIndex + 1)
+        .map((row, index) => ({
+          row,
+          line: headerIndex + index + 2,
+          label: normalize(row[0])
+        }))
+        .filter(record => record.label);
+
+      function findOne(labels) {
+        const matches = records.filter(record =>
+          labels.includes(record.label)
+        );
+
+        if (matches.length !== 1) {
+          throw new Error(
+            `Se requiere una sola fila "${labels.join(" / ")}" en ${sheetName}.`
+          );
+        }
+
+        return matches[0];
+      }
+
+      function values(record, allowBlank) {
+        return columns.map((column, index) =>
+          number(
+            record.row[column],
+            `${sheetName}, fila ${record.line}, ${MONTHS[index]}`,
+            allowBlank
+          )
+        );
+      }
+
+      const totalRecord = findOne([spec.total]);
+      const totals = values(totalRecord, false);
+
+      const controls = [
+        {
+          record: totalRecord,
+          values: totals
+        }
+      ];
+
+      let returns = null;
+      let net = null;
+
+      if (spec.key === "ingresos") {
+        const returnsRecord = findOne([
+          "DEV EN VENTAS",
+          "DEVOLUCIONES EN VENTAS"
+        ]);
+
+        const netRecord = findOne([
+          "TOTAL INGRESOS NETOS",
+          "INGRESOS NETOS"
+        ]);
+
+        returns = values(returnsRecord, false);
+        net = values(netRecord, false);
+
+        controls.push(
+          { record: returnsRecord, values: returns },
+          { record: netRecord, values: net }
+        );
+      }
+
+      const controlRecords = new Set(
+        controls.map(control => control.record)
+      );
+
+      const detail = records
+        .filter(record =>
+          !controlRecords.has(record)
+          && !record.label.startsWith("TOTAL")
+        )
+        .map(record => ({
+          name: String(record.row[0]).trim(),
+          values: values(record, true)
+        }));
+
+      if (!detail.length) {
+        throw new Error(
+          `No se encontró detalle contable en ${sheetName}.`
+        );
+      }
+
+      for (let index = 0; index < 12; index++) {
+        const detailTotal = detail.reduce(
+          (sum, row) => sum + row.values[index],
+          0
+        );
+
+        parsed.checks.push({
+          sheet: sheetName,
+          month: index,
+          concept: "Detalle frente a total declarado",
+          declared: totals[index],
+          calculated: detailTotal,
+          difference: detailTotal - totals[index]
+        });
+
+        if (net) {
+          const calculatedNet = totals[index] - returns[index];
+
+          parsed.checks.push({
+            sheet: sheetName,
+            month: index,
+            concept: "Brutos menos devoluciones",
+            declared: net[index],
+            calculated: calculatedNet,
+            difference: calculatedNet - net[index]
+          });
+        }
+
+        const hasActivity =
+          totals[index] !== 0
+          || (returns && returns[index] !== 0)
+          || detail.some(row => row.values[index] !== 0);
+
+        if (hasActivity) {
+          parsed.suggestedCutoff = Math.max(
+            parsed.suggestedCutoff,
+            index + 1
+          );
+        }
+      }
+
+      if (accumulatedColumn >= 0) {
+        for (const control of controls) {
+          const declared = number(
+            control.record.row[accumulatedColumn],
+            `${sheetName}, acumulado fila ${control.record.line}`
+          );
+
+          const calculated = control.values.reduce(
+            (sum, value) => sum + value,
+            0
+          );
+
+          parsed.checks.push({
+            sheet: sheetName,
+            month: null,
+            concept: `Acumulado: ${control.record.row[0]}`,
+            declared,
+            calculated,
+            difference: calculated - declared
+          });
+        }
+      }
+
+      parsed.sheets[spec.key] = {
+        totals,
+        returns,
+        detail
+      };
+    }
+
+    return parsed;
+  }
+
+  function buildEntry(parsed, cutoff) {
+    if (!Number.isInteger(cutoff) || cutoff < 1 || cutoff > 12) {
+      throw new Error("Selecciona un mes de corte válido.");
+    }
+
+    if (cutoff < parsed.suggestedCutoff) {
+      throw new Error(
+        "Hay movimientos posteriores al corte seleccionado. Revisa el corte."
+      );
+    }
+
+    const data = {};
+
+    for (let index = 0; index < cutoff; index++) {
+      const sheets = parsed.sheets;
+
+      data[MONTHS[index]] = {
+        ing_brutos: sheets.ingresos.totals[index],
+        dev_ventas: sheets.ingresos.returns[index],
+        costo_ventas: sheets.costos.totals[index],
+
+        // El Excel no separa administración y ventas.
+        // Se conserva el total sin inventar esa distribución.
+        gastos_admin: 0,
+        gastos_ventas: 0,
+        gastos_op_total: sheets.gastos_op.totals[index],
+
+        gastos_fin: sheets.gastos_fin.totals[index],
+        otros_ing: sheets.otros_ing.totals[index]
+      };
+    }
+
+    const details = {};
+
+    for (const spec of SPECS) {
+      details[spec.key] = parsed.sheets[spec.key].detail.map(row => ({
+        name: row.name,
+        values: row.values.slice(0, cutoff)
+      }));
+    }
+
+    details.ingresos.push({
+      name: "Devoluciones en ventas",
+      values: parsed.sheets.ingresos.returns.slice(0, cutoff)
+    });
+
+    return {
+      year: YEAR,
+      filename: parsed.filename,
+      entity: parsed.entity,
+      cutoff,
+      data,
+      details,
+      checks: parsed.checks.filter(check =>
+        check.month === null || check.month < cutoff
+      ),
+      importedAt: new Date().toISOString()
+    };
+  }
+
+  function issues(entry) {
+    return entry.checks.filter(
+      check => Math.abs(check.difference) > TOLERANCE
+    );
+  }
+
+  function table(headers, rows) {
+    return `
+      <div class="fs-scroll">
+        <table class="fs-table">
+          <thead>
+            <tr>
+              ${headers.map(header =>
+                `<th>${escapeHTML(header)}</th>`
+              ).join("")}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  function preview() {
+    if (!pending) return;
+
+    $("fs-import-apply").disabled = true;
+
+    try {
+      const entry = buildEntry(
+        pending,
+        Number($("fs-import-cutoff").value)
+      );
+
+      const raw = Object.fromEntries(
+        FIELDS.map(field => [field, 0])
+      );
+
+      for (const row of Object.values(entry.data)) {
+        raw.ing_brutos += row.ing_brutos;
+        raw.dev_ventas += row.dev_ventas;
+        raw.costo_ventas += row.costo_ventas;
+        raw.gastos_op += row.gastos_op_total;
+        raw.gastos_fin += row.gastos_fin;
+        raw.otros_ing += row.otros_ing;
+      }
+
+      const pl = calculate(raw);
+      const differences = issues(entry);
+
+      const summary = [
+        ["Ingresos brutos", pl.ing_brutos],
+        ["Devoluciones", pl.dev_ventas],
+        ["Ingresos netos", pl.ing_netos],
+        ["Costo de ventas", pl.costo_ventas],
+        ["Utilidad bruta", pl.util_bruta],
+        ["Gastos operativos", pl.gastos_op],
+        ["Utilidad operativa", pl.util_op],
+        ["Gastos financieros", pl.gastos_fin],
+        ["Otros ingresos", pl.otros_ing],
+        ["Resultado analítico antes de renta", pl.util_neta]
+      ];
+
+      $("fs-import-preview").innerHTML = `
+        <p>
+          Archivo: ${escapeHTML(entry.filename)}<br>
+          Sede: ${escapeHTML(entry.entity.replace("_", " "))}<br>
+          Periodo: enero a ${MONTHS[entry.cutoff - 1].toLowerCase()}
+          de ${YEAR}
+        </p>
+
+        ${table(
+          ["Concepto", "Valor"],
+          summary.map(([label, value]) => `
+            <tr>
+              <td>${escapeHTML(label)}</td>
+              <td>${money(value)}</td>
+            </tr>
+          `)
+        )}
+
+        <p>
+          Controles: ${entry.checks.length}.
+          Tolerancia por diferencia: $1.
+          Los subtotales se excluyen de la suma del detalle.
+        </p>
+
+        ${
+          differences.length
+            ? `
+              <div class="fs-notice fs-warning">
+                Hay ${differences.length} diferencia(s).
+                Si continúas, se utilizarán los totales declarados
+                del Excel y se conservarán las alertas.
+              </div>
+
+              ${table(
+                ["Hoja / periodo", "Control", "Diferencia"],
+                differences.map(check => `
+                  <tr>
+                    <td>
+                      ${escapeHTML(check.sheet)} /
+                      ${
+                        check.month === null
+                          ? "Acumulado"
+                          : MONTHS[check.month]
+                      }
+                    </td>
+                    <td>${escapeHTML(check.concept)}</td>
+                    <td>${money(check.difference)}</td>
+                  </tr>
+                `)
+              )}
+            `
+            : `
+              <div class="fs-notice">
+                Los controles coinciden dentro de la tolerancia.
+              </div>
+            `
+        }
+      `;
+
+      $("fs-import-ack-wrap").hidden = !differences.length;
+
+      $("fs-import-apply").disabled =
+        !$("fs-import-year").checked
+        || (
+          differences.length > 0
+          && !$("fs-import-ack").checked
+        );
+
+    } catch (error) {
+      $("fs-import-preview").textContent = error.message;
+      $("fs-import-apply").disabled = true;
+    }
+  }
+
+  async function handleUpload(event) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      if (!window.XLSX) {
+        throw new Error(
+          "No se cargó el lector de Excel. Abre la aplicación con internet."
+        );
+      }
+
+      const workbook = XLSX.read(
+        await file.arrayBuffer(),
+        { type: "array" }
+      );
+
+      pending = parseWorkbook(workbook, file.name);
+
+      $("fs-import-title").textContent =
+        `Importar ${pending.entity.replace("_", " ")}`;
+
+      $("fs-import-cutoff").value =
+        String(pending.suggestedCutoff);
+
+      $("fs-import-year").checked = false;
+      $("fs-import-ack").checked = false;
+
+      preview();
+      $("fs-import-dialog").showModal();
+
+    } catch (error) {
+      alert(`No se importó ningún dato:\n${error.message}`);
+    } finally {
+      event.target.value = "";
+    }
+  }
+
+  function applyImport() {
+    if (!pending || $("fs-import-apply").disabled) return;
+
+    try {
+      const entry = buildEntry(
+        pending,
+        Number($("fs-import-cutoff").value)
+      );
+
+      if (!$("fs-import-year").checked) return;
+
+      if (issues(entry).length && !$("fs-import-ack").checked) {
+        return;
+      }
+
+      const updated = {
+        ...imports,
+        [entry.entity]: entry
+      };
+
+      // Se guarda antes de sustituir la información en memoria.
+      // Si falla el guardado, se conservan los datos anteriores.
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(updated)
+      );
+
+      imports = updated;
+      DB[entry.entity] = entry.data;
+
+      $("entitySelect").value = entry.entity;
+      $("reportTypeSelect").value = "ACUMULADO";
+      $("singlePeriodSelect").value = MONTHS[entry.cutoff - 1];
+      $("rangeStartSelect").value = "ENERO";
+      $("rangeEndSelect").value = MONTHS[entry.cutoff - 1];
+
+      $("fs-import-dialog").close();
+      pending = null;
+
+      window.showModule("inicio");
+      window.handleReportTypeChange();
+
+    } catch (error) {
+      alert(
+        "No se completó la importación. " +
+        "Comprueba que el navegador permita almacenamiento local.\n" +
+        error.message
+      );
+    }
+  }
+
+  function sourceNotice(entity, months) {
+    const descriptions = selectedEntities(entity).map(key => {
+      const entry = imports[key];
+      const label = key.replace("_", " ");
+
+      if (!entry) {
+        return (
+          `${label}: base incorporada en el HTML; ` +
+          "no procede de una importación verificada."
+        );
+      }
+
+      const missing = months.filter(
+        month => !Object.prototype.hasOwnProperty.call(
+          entry.data,
+          month
+        )
+      );
+
+      const differences = issues(entry);
+
+      return (
+        `${label}: ${entry.filename}. ` +
+        `Corte ${MONTHS[entry.cutoff - 1]} de ${YEAR}. ` +
+        (
+          differences.length
+            ? `${differences.length} diferencia(s) pendientes. `
+            : "Controles conciliados. "
+        ) +
+        (
+          missing.length
+            ? `Sin datos: ${missing.join(", ")}. `
+            : ""
+        ) +
+        "Gastos operativos sin separar administración y ventas."
+      );
+    });
+
+    $("fs-source-notice").textContent =
+      descriptions.join("\n");
+
+    $("fs-source-notice").classList.toggle(
+      "fs-warning",
+      !available(entity, months)
+      || selectedEntities(entity).some(
+        key => imports[key] && issues(imports[key]).length
+      )
+    );
+  }
+
+  const PL_ROWS = [
+    ["Ingresos brutos", "ing_brutos"],
+    ["Devoluciones en ventas", "dev_ventas"],
+    ["INGRESOS NETOS", "ing_netos", true],
+    ["Costo de ventas", "costo_ventas"],
+    ["UTILIDAD BRUTA", "util_bruta", true],
+    ["Gastos operativos", "gastos_op"],
+    ["UTILIDAD OPERATIVA", "util_op", true],
+    ["Gastos financieros", "gastos_fin"],
+    ["Otros ingresos", "otros_ing"],
+    ["RESULTADO ANALÍTICO ANTES DE RENTA", "util_neta", true]
+  ];
+
+  function renderDashboard() {
+    const entity = $("entitySelect").value;
+    const months = getActiveMonths();
+    const complete = available(entity, months);
+    const pl = calculate(aggregate(entity, months));
+
+    const kpis = {
+      kpiIngNetos: "ing_netos",
+      kpiCostoVentas: "costo_ventas",
+      kpiGastosOperativos: "gastos_op",
+      kpiUtilBruta: "util_bruta",
+      kpiUtilNeta: "util_neta"
+    };
+
+    for (const [id, field] of Object.entries(kpis)) {
+      if ($(id)) {
+        $(id).textContent = complete ? money(pl[field]) : "N/D";
+      }
+    }
+
+    $("plTableHead").innerHTML = `
+      <tr>
+        <th class="py-2.5 px-3">Concepto</th>
+        ${months.map(month => `
+          <th class="py-2.5 px-3 text-right">
+            ${month.slice(0, 3)}
+          </th>
+        `).join("")}
+        <th class="py-2.5 px-3 text-right">Total periodo</th>
+        <th class="py-2.5 px-3 text-right">% ingresos netos</th>
+      </tr>
+    `;
+
+    $("plTableBody").innerHTML = PL_ROWS.map(
+      ([label, field, bold]) => {
+        const percentage =
+          complete && pl.ing_netos !== 0
+            ? `${(pl[field] / pl.ing_netos * 100).toFixed(2)}%`
+            : "N/D";
+
+        return `
+          <tr class="${bold ? "fs-total" : ""}">
+            <td class="py-2 px-3">${escapeHTML(label)}</td>
+
+            ${months.map(month => {
+              const monthly = calculate(
+                aggregate(entity, [month])
+              );
+
+              return `
+                <td class="py-2 px-3 text-right">
+                  ${
+                    available(entity, [month])
+                      ? money(monthly[field])
+                      : "N/D"
+                  }
+                </td>
+              `;
+            }).join("")}
+
+            <td class="py-2 px-3 text-right">
+              ${complete ? money(pl[field]) : "N/D"}
+            </td>
+
+            <td class="py-2 px-3 text-right">
+              ${percentage}
+            </td>
+          </tr>
+        `;
+      }
+    ).join("");
+
+    sourceNotice(entity, months);
+    renderFinancialDetail(entity, months, pl, complete);
+  }
+
+  function renderFinancialDetail(entity, months, pl, complete) {
+    if (!FINANCIAL_MODULES.includes(activeModule)) return;
+
+    const view = $(`view-${activeModule}`);
+    if (!view) return;
+
+    const titles = {
+      ingresos: "Ingresos",
+      costos: "Costos",
+      gastos_op: "Gastos operativos",
+      gastos_fin: "Gastos financieros",
+      otros_ing: "Otros ingresos",
+      utilidad_neta: "Resultados"
+    };
+
+    if (activeModule === "utilidad_neta") {
+      view.innerHTML = `
+        <div class="fs-panel">
+          <h2 style="font-weight:800;font-size:18px">
+            Resultados del periodo
+          </h2>
+
+          ${table(
+            ["Concepto", "Valor"],
+            PL_ROWS.map(([label, field, bold]) => `
+              <tr class="${bold ? "fs-total" : ""}">
+                <td>${escapeHTML(label)}</td>
+                <td>${complete ? money(pl[field]) : "N/D"}</td>
+              </tr>
+            `)
+          )}
+
+          <div class="fs-notice">
+            El resultado analítico no deduce un gasto por impuesto
+            de renta no informado en los archivos.
+          </div>
+        </div>
+      `;
+
+      return;
+    }
+
+    const records = [];
+
+    for (const key of selectedEntities(entity)) {
+      const entry = imports[key];
+
+      if (!entry) continue;
+
+      for (const row of entry.details[activeModule] || []) {
+        records.push({
+          entity: key,
+          name: row.name,
+          values: row.values
+        });
+      }
+    }
+
+    const headings = [
+      "Sede / concepto",
+      ...months.map(month => month.slice(0, 3)),
+      "Total periodo"
+    ];
+
+    const rendered = records.map(row => {
+      const rowComplete = available(row.entity, months);
+
+      const total = months.reduce((sum, month) => {
+        const index = MONTHS.indexOf(month);
+        return sum + (row.values[index] || 0);
+      }, 0);
+
+      return `
+        <tr>
+          <td>
+            ${escapeHTML(row.entity.replace("_", " "))}<br>
+            ${escapeHTML(row.name)}
+          </td>
+
+          ${months.map(month => {
+            const index = MONTHS.indexOf(month);
+
+            return `
+              <td>
+                ${
+                  available(row.entity, [month])
+                    ? money(row.values[index] || 0)
+                    : "N/D"
+                }
+              </td>
+            `;
+          }).join("")}
+
+          <td>${rowComplete ? money(total) : "N/D"}</td>
+        </tr>
+      `;
+    });
+
+    const detailWarnings = selectedEntities(entity)
+      .flatMap(key => {
+        const entry = imports[key];
+        if (!entry) return [];
+
+        return issues(entry)
+          .filter(check =>
+            normalize(check.sheet)
+              === normalize(
+                SPECS.find(spec =>
+                  spec.key === activeModule
+                )?.sheet
+              )
+            && (
+              check.month === null
+              || months.includes(MONTHS[check.month])
+            )
+          )
+          .map(check =>
+            `${key.replace("_", " ")}: ${check.concept}, ` +
+            `${
+              check.month === null
+                ? "acumulado"
+                : MONTHS[check.month]
+            }: ${money(check.difference)}.`
+          );
+      });
+
+    view.innerHTML = `
+      <div class="fs-panel">
+        <h2 style="font-weight:800;font-size:18px;margin-bottom:12px">
+          ${titles[activeModule]}
+        </h2>
+
+        ${
+          records.length
+            ? table(headings, rendered)
+            : `
+              <div class="fs-notice">
+                Importa el Excel financiero de la sede para
+                consultar sus cuentas detalladas.
+              </div>
+            `
+        }
+
+        ${
+          selectedEntities(entity).some(key => !imports[key])
+            ? `
+              <div class="fs-notice fs-warning">
+                Hay sedes sin detalle importado.
+                El detalle mostrado puede estar incompleto.
+              </div>
+            `
+            : ""
+        }
+
+        ${
+          detailWarnings.length
+            ? `
+              <div class="fs-notice fs-warning">
+                ${detailWarnings.map(escapeHTML).join("<br>")}
+                <br>
+                Los resultados utilizan los totales declarados
+                del archivo.
+              </div>
+            `
+            : ""
+        }
+      </div>
+    `;
+  }
+
+  function restore() {
+    try {
+      const saved = JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || "{}"
+      );
+
+      for (const [entity, entry] of Object.entries(saved)) {
+        if (
+          !["PIPE_AUDIO", "JD_AUDIO"].includes(entity)
+          || entry.year !== YEAR
+          || !entry.data
+          || !entry.details
+          || !Array.isArray(entry.checks)
+        ) {
+          continue;
+        }
+
+        imports[entity] = entry;
+        DB[entity] = entry.data;
+      }
+    } catch (error) {
+      console.warn(
+        "No se recuperó la importación financiera local.",
+        error
+      );
+    }
+  }
+
+  function install() {
+    if (
+      !$("entitySelect")
+      || !$("view-inicio")
+      || !$("excelFileInput")
+    ) {
+      console.error(
+        "No se encontró la estructura esperada de FinSight."
+      );
+      return;
+    }
+
+    if ($("fs-import-dialog")) return;
+
+    // Los filtros quedan disponibles en todos los módulos.
+    const filters = $("view-inicio").querySelector("section");
+
+    if (filters) {
+      filters.id = "fs-filters";
+      $("view-inicio").parentElement.insertBefore(
+        filters,
+        $("view-inicio")
+      );
+    }
+
+    for (const id of [
+      "singlePeriodSelect",
+      "rangeStartSelect",
+      "rangeEndSelect"
+    ]) {
+      const select = $(id);
+      const previous = select.value;
+
+      select.innerHTML = MONTHS.map(month => `
+        <option value="${month}">
+          ${month.charAt(0) + month.slice(1).toLowerCase()}
+          ${YEAR}
+        </option>
+      `).join("");
+
+      select.value = MONTHS.includes(previous)
+        ? previous
+        : "SEPTIEMBRE";
+    }
+
+    const notice = document.createElement("div");
+    notice.id = "fs-source-notice";
+    notice.className = "fs-notice";
+    notice.setAttribute("role", "status");
+
+    $("view-inicio").parentElement.insertBefore(
+      notice,
+      $("view-inicio")
+    );
+
+    const dialog = document.createElement("dialog");
+    dialog.id = "fs-import-dialog";
+    dialog.setAttribute(
+      "aria-labelledby",
+      "fs-import-title"
+    );
+
+    dialog.innerHTML = `
+      <h2 id="fs-import-title">Importar estado de resultados</h2>
+
+      <p>
+        Formato PPAM de cinco hojas: Ingresos, Costos,
+        Gastos_Op, Gastos_Fin y Otros_Ing.
+      </p>
+
+      <label>
+        Mes de corte
+        <select id="fs-import-cutoff">
+          ${MONTHS.map((month, index) => `
+            <option value="${index + 1}">
+              ${month}
+            </option>
+          `).join("")}
+        </select>
+      </label>
+
+      <p>
+        <label>
+          <input type="checkbox" id="fs-import-year">
+          Confirmo que el archivo corresponde al ejercicio 2026.
+        </label>
+      </p>
+
+      <div id="fs-import-preview"></div>
+
+      <p id="fs-import-ack-wrap" hidden>
+        <label>
+          <input type="checkbox" id="fs-import-ack">
+          Reconozco las diferencias y deseo utilizar los
+          totales declarados, conservando las alertas.
+        </label>
+      </p>
+
+      <p>
+        La carga reemplaza la información financiera de la sede
+        detectada. Se guarda en este navegador.
+        No se envía a Supabase.
+      </p>
+
+      <button id="fs-import-apply" disabled>
+        Aplicar importación
+      </button>
+
+      <button id="fs-import-cancel">
+        Cancelar
+      </button>
+    `;
+
+    document.body.appendChild(dialog);
+
+    $("fs-import-cutoff").addEventListener("change", preview);
+    $("fs-import-year").addEventListener("change", preview);
+    $("fs-import-ack").addEventListener("change", preview);
+    $("fs-import-apply").addEventListener("click", applyImport);
+
+    $("fs-import-cancel").addEventListener("click", () => {
+      dialog.close();
+      pending = null;
+    });
+
+    dialog.addEventListener("cancel", () => {
+      pending = null;
+    });
+
+    $("excelFileInput").onchange = handleUpload;
+    window.handleExcelUpload = handleUpload;
+
+    const uploadLabel = document.querySelector(
+      'button[onclick*="excelFileInput"] span'
+    );
+
+    if (uploadLabel) {
+      uploadLabel.textContent = "Importar PyG Excel";
+    }
+
+    const resultCard = $("kpiUtilNeta")?.parentElement;
+    const resultLabel = resultCard?.querySelector(
+      "div:first-child"
+    );
+
+    if (resultLabel) {
+      resultLabel.textContent = "5. Resultado antes de renta";
+    }
+
+    const originalShowModule = window.showModule;
+
+    window.showModule = function(module) {
+      activeModule = module;
+      originalShowModule(module);
+
+      if (
+        module === "inicio"
+        || FINANCIAL_MODULES.includes(module)
+      ) {
+        renderDashboard();
+      }
+    };
+
+    window.renderDashboard = renderDashboard;
+
+    restore();
+    window.handleReportTypeChange();
+  }
+
+  if (document.readyState === "complete") {
+    install();
+  } else {
+    window.addEventListener("load", install, { once: true });
+  }
+})();
+</script>
